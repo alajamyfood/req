@@ -2,118 +2,126 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>طلب منتجات العجمي</title>
 
-  <!-- الأيقونات نسبية (بدون /) -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <!-- ✅ الأيقونات (روابط نسبية لتعمل على GitHub Pages) -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" sizes="192x192" href="android-chrome-192x192.png">
 
-  <!-- Open Graph -->
+  <!-- مشاركة -->
   <meta property="og:title" content="طلب منتجات العجمي">
-  <meta property="og:description" content="اطلب منتجات العجمي الأصلية بسهولة وسرعة">
+  <meta property="og:description" content="اطلب منتجات العجمي الأصلية بسهولة">
   <meta property="og:image" content="logo.png">
-  <meta property="og:url" content="https://alajamyfood.github.io">
-  <meta property="og:type" content="website">
-
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="طلب منتجات العجمي">
-  <meta name="twitter:description" content="اطلب منتجات العجمي الأصلية بسهولة وسرعة">
   <meta name="twitter:image" content="logo.png">
 
-  <style>
-    :root {
-      --turquoise-dark: #006d77;
-      --turquoise-medium: #119da4;
-      --turquoise-light: #83c5be;
-      --turquoise-pale: #e0f7f4;
-      --text-dark: #0d1f1f;
-      --blur-bg: rgba(255, 255, 255, 0.92);
-      --border: #a0d4cf;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
-    body {
-      font-family: 'Tajawal', system-ui, sans-serif;
-      background: linear-gradient(to bottom, var(--turquoise-dark), var(--turquoise-pale));
-      background-attachment: fixed;
-      background-size: cover;
-      color: var(--text-dark);
-      min-height: 100vh;
-      padding: 8px;
-    }
-    .container {
-      background: var(--blur-bg);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
-      padding: 16px 12px;
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto;
-      box-shadow: 0 8px 30px rgba(0,109,119,0.25);
-      border: 1px solid rgba(131,197,190,0.3);
-    }
-    .header { text-align:center; margin-bottom:16px; }
-    .logo-img { max-width:240px; height:auto; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,0.18); display:block; margin:0 auto 8px; }
-    .since { font-size:0.95rem; color:var(--turquoise-dark); font-weight:600; }
-    h2 { text-align:center; color:var(--turquoise-dark); font-size:1.55rem; font-weight:700; margin-bottom:16px; }
-    .form-group { margin-bottom:16px; }
-    label { display:block; margin-bottom:5px; font-weight:600; color:#0d3b3b; font-size:0.98rem; }
-    input, select, textarea {
-      width:100%; padding:12px; border:1px solid var(--border); border-radius:8px;
-      background:white; font-size:1rem;
-    }
-    input:focus, select:focus { outline:none; border-color:var(--turquoise-medium); box-shadow:0 0 0 3px rgba(17,157,164,0.2); }
-    table { width:100%; border-collapse:collapse; margin:8px 0 12px; }
-    th, td { padding:9px 5px; text-align:right; border-bottom:1px solid #e0f0ef; font-size:0.95rem; }
-    th { background:rgba(17,157,164,0.08); font-weight:600; color:#0d5a5f; }
-    .remove-btn { background:#e74c3c; color:white; border:none; padding:7px 11px; border-radius:6px; cursor:pointer; font-size:0.85rem; }
-    .remove-btn:hover { background:#c0392b; }
-    .add-btn { background:var(--turquoise-medium); color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; font-size:1rem; width:100%; margin-top:8px; }
-    .add-btn:hover { background:var(--turquoise-light); }
-    button[type="submit"] {
-      width:100%; padding:14px; background:linear-gradient(90deg, var(--turquoise-medium), var(--turquoise-light));
-      color:white; border:none; border-radius:12px; font-size:1.15rem; font-weight:700; cursor:pointer;
-      margin-top:16px; box-shadow:0 4px 16px rgba(17,157,164,0.3);
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
-    @media (max-width: 580px) {
-      body { padding: 6px 4px; }
-      .container { padding: 14px 10px; border-radius: 14px; }
-      .logo-img { max-width: 200px; }
-      h2 { font-size: 1.4rem; margin-bottom: 14px; }
-      .form-group { margin-bottom: 14px; }
-      label { font-size: 0.93rem; margin-bottom: 4px; }
-      input, select, textarea { padding: 11px; font-size: 0.98rem; }
-      table { margin: 6px 0 10px; }
-      table, thead, tbody, th, td, tr { display: block; }
-      thead tr { position: absolute; top: -9999px; left: -9999px; }
-      tr { margin-bottom: 14px; border: 1px solid #ddd; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 8px; }
-      td { border: none; border-bottom: 1px solid #f5f5f5; position: relative; padding: 11px 6px 11px 48%; text-align: right; font-size: 0.97rem; }
-      td:before { position: absolute; top: 11px; left: 6px; width: 45%; padding-right: 6px; white-space: nowrap; font-weight: 600; color: var(--turquoise-dark); font-size: 0.93rem; }
-      td:nth-of-type(1):before { content: "المنتج"; }
-      td:nth-of-type(2):before { content: "الكمية"; }
-      td:nth-of-type(3):before { content: "الوزن"; }
-      .remove-btn { position: absolute; top: 6px; right: 6px; padding: 7px 10px; font-size: 0.8rem; }
-      .add-btn { padding: 11px; font-size: 0.98rem; }
-      button[type="submit"] { padding: 13px; font-size: 1.08rem; }
-    }
-  </style>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --turquoise-dark: #006d77;
+  --turquoise-medium: #119da4;
+  --turquoise-light: #83c5be;
+  --turquoise-pale: #e0f7f4;
+  --text-dark: #0d1f1f;
+  --border: #a0d4cf;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Tajawal',sans-serif;
+  background:linear-gradient(to bottom,var(--turquoise-dark),var(--turquoise-pale));
+  color:var(--text-dark);
+  padding:12px;
+}
+
+.container{
+  background:rgba(255,255,255,0.94);
+  border-radius:18px;
+  padding:22px 20px;
+  width:100%;
+  max-width:720px;
+  margin:20px auto;
+  box-shadow:0 10px 35px rgba(0,109,119,.25);
+}
+
+.header{text-align:center;margin-bottom:18px}
+.logo-img{max-width:280px;width:100%;height:auto;margin:auto;display:block}
+.since{color:var(--turquoise-dark);font-weight:600;margin-top:6px}
+
+h2{text-align:center;color:var(--turquoise-dark);margin-bottom:18px}
+
+.form-group{margin-bottom:16px}
+label{display:block;margin-bottom:6px;font-weight:600}
+
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  font-size:1rem;
+}
+
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th,td{padding:10px;border-bottom:1px solid #eee;text-align:right}
+
+.add-btn,.remove-btn,button[type=submit]{
+  border:none;
+  cursor:pointer;
+  border-radius:8px;
+}
+
+.add-btn{
+  width:100%;
+  background:var(--turquoise-medium);
+  color:#fff;
+  padding:12px;
+  margin-top:10px;
+}
+
+.remove-btn{
+  background:#e74c3c;
+  color:#fff;
+  padding:6px 10px;
+  font-size:.85rem;
+}
+
+button[type=submit]{
+  width:100%;
+  padding:14px;
+  margin-top:18px;
+  font-size:1.1rem;
+  font-weight:700;
+  background:linear-gradient(90deg,var(--turquoise-medium),var(--turquoise-light));
+  color:white;
+}
+
+/* 📱 موبايل */
+@media(max-width:580px){
+  table,thead,tbody,th,td,tr{display:block}
+  thead{display:none}
+  tr{background:#fff;margin-bottom:12px;border-radius:10px;padding:10px}
+  td{border:none;padding:8px 0}
+}
+
+/* 🖥️ كمبيوتر */
+@media(min-width:900px){
+  h2{font-size:1.9rem}
+  .logo-img{max-width:320px}
+}
+</style>
 </head>
-<body>
 
+<body>
 <div class="container">
+
   <div class="header">
-    <img src="logo.png" alt="العجمي" class="logo-img" loading="lazy">
+    <img src="logo.png" class="logo-img" alt="العجمي">
     <div class="since">Since 1989 • Al Ajamy</div>
   </div>
 
@@ -122,13 +130,13 @@
   <form id="orderForm">
 
     <div class="form-group">
-      <label for="governorate">المحافظة / المدينة *</label>
-      <input type="text" id="governorate" name="governorate" placeholder="مثال: غازي عنتاب – قونيا – أنطاليا – إسطنبول" required>
+      <label>المحافظة / المدينة *</label>
+      <input type="text" name="governorate" required>
     </div>
 
     <div class="form-group">
-      <label for="customerName">اسم العميل *</label>
-      <input type="text" id="customerName" name="customerName" placeholder="مثال: محمد أحمد" required>
+      <label>اسم العميل *</label>
+      <input type="text" name="customerName" required>
     </div>
 
     <div class="form-group">
@@ -136,7 +144,7 @@
       <table>
         <thead>
           <tr>
-            <th>نوع المنتج</th>
+            <th>المنتج</th>
             <th>الكمية</th>
             <th>الوزن</th>
             <th></th>
@@ -148,8 +156,8 @@
     </div>
 
     <div class="form-group">
-      <label for="notes">ملاحظات إضافية</label>
-      <textarea id="notes" name="notes" rows="3" placeholder="أي تعليقات أو تفاصيل إضافية..."></textarea>
+      <label>ملاحظات</label>
+      <textarea name="notes"></textarea>
     </div>
 
     <button type="submit" id="submitBtn">إرسال الطلب</button>
@@ -159,152 +167,57 @@
 <datalist id="product-list">
   <option value="001 عجمي حمص بالطحينة 325غ">
   <option value="002 عجمي كريم الثوم 230غ">
-  <option value="003 عجمي متبل 230غ">
-  <option value="004 عجمي حمص 450غ">
-  <option value="005 عجمي حمص 300غ">
-  <option value="006 عجمي حمص 225غ">
-  <option value="007 عجمي كريم الثوم 225غ">
-  <option value="008 عجمي متبل 450غ">
-  <option value="009 عجمي متبل 225غ">
-  <option value="010 زاد العربي حمص بالطحينة 230غ">
-  <option value="011 زاد العربي كريم الثوم 230غ">
-  <option value="012 زاد العربي متبل 230غ">
-  <option value="013 الحمصاني حمص 230غ">
-  <option value="014 الحمصاني كريم الثوم 230غ">
-  <option value="015 الخال حمص 230غ">
-  <option value="016 الخال كريم الثوم 230غ">
-  <option value="017 الخال متبل 230غ">
   <option value="018 عجمي حمص بالكيلو">
-  <option value="019 الحمصاني حمص بالكيلو">
-  <option value="020 زاد العربي كريم الثوم بالكيلو">
-  <option value="021 الحمصاني كريم الثوم بالكيلو">
-  <option value="022 الخال كريم الثوم بالكيلو">
-  <option value="023 MNZ كريم الثوم بالكيلو">
-  <option value="024 عجمي متبل بالكيلو">
-  <option value="025 حمص خام أسبتيك 20 كغ">
-  <option value="026 2750غ عجمي لبنة">
-  <option value="027 900غ عجمي لبنة">
-  <option value="028 أبو عبدو حمص 300غ">
 </datalist>
 
 <script>
-// كائن الوزن التلقائي
-const productWeights = {
-  "001 عجمي حمص بالطحينة 325غ": "325 غرام",
-  "002 عجمي كريم الثوم 230غ": "230 غرام",
-  "003 عجمي متبل 230غ": "230 غرام",
-  "004 عجمي حمص 450غ": "450 غرام",
-  "005 عجمي حمص 300غ": "300 غرام",
-  "006 عجمي حمص 225غ": "225 غرام",
-  "007 عجمي كريم الثوم 225غ": "225 غرام",
-  "008 عجمي متبل 450غ": "450 غرام",
-  "009 عجمي متبل 225غ": "225 غرام",
-  "010 زاد العربي حمص بالطحينة 230غ": "230 غرام",
-  "011 زاد العربي كريم الثوم 230غ": "230 غرام",
-  "012 زاد العربي متبل 230غ": "230 غرام",
-  "013 الحمصاني حمص 230غ": "230 غرام",
-  "014 الحمصاني كريم الثوم 230غ": "230 غرام",
-  "015 الخال حمص 230غ": "230 غرام",
-  "016 الخال كريم الثوم 230غ": "230 غرام",
-  "017 الخال متبل 230غ": "230 غرام",
-  "018 عجمي حمص بالكيلو": "كيلو غرام",
-  "019 الحمصاني حمص بالكيلو": "كيلو غرام",
-  "020 زاد العربي كريم الثوم بالكيلو": "كيلو غرام",
-  "021 الحمصاني كريم الثوم بالكيلو": "كيلو غرام",
-  "022 الخال كريم الثوم بالكيلو": "كيلو غرام",
-  "023 MNZ كريم الثوم بالكيلو": "كيلو غرام",
-  "024 عجمي متبل بالكيلو": "كيلو غرام",
-  "025 حمص خام أسبتيك 20 كغ": "20 كغ",
-  "026 2750غ عجمي لبنة": "2750 غرام",
-  "027 900غ عجمي لبنة": "900 غرام",
-  "028 أبو عبدو حمص 300غ": "300 غرام"
+const productWeights={
+ "001 عجمي حمص بالطحينة 325غ":"325 غرام",
+ "002 عجمي كريم الثوم 230غ":"230 غرام",
+ "018 عجمي حمص بالكيلو":"كيلو غرام"
 };
 
-let rowCounter = 0;
+let rowCounter=0;
 
-function addRow() {
-  const tbody = document.getElementById('itemsBody');
-  const tr = document.createElement('tr');
-  const productInputId = `product-input-${rowCounter}`;
-  const weightSelectId = `weight-select-${rowCounter}`;
+function addRow(){
+ const tbody=document.getElementById('itemsBody');
+ const id=rowCounter++;
 
-  tr.innerHTML = `
-    <td>
-      <input 
-        id="${productInputId}"
-        list="product-list" 
-        name="product_${rowCounter}" 
-        placeholder="اكتب أو اختر المنتج (مثال: 001 عجمي حمص...)" 
-        required
-      >
-    </td>
-    <td>
-      <input type="number" name="quantity_${rowCounter}" min="1" step="1" placeholder="شنطة / طرد" required>
-    </td>
-    <td>
-      <select id="${weightSelectId}" name="weight_${rowCounter}">
-        <option value="" selected disabled hidden></option>
-        <option value="325 غرام">325 غرام</option>
-        <option value="230 غرام">230 غرام</option>
-        <option value="450 غرام">450 غرام</option>
-        <option value="300 غرام">300 غرام</option>
-        <option value="225 غرام">225 غرام</option>
-        <option value="كيلو غرام">كيلو غرام</option>
-        <option value="2750 غرام">2750 غرام</option>
-        <option value="900 غرام">900 غرام</option>
-      </select>
-    </td>
-    <td><button type="button" class="remove-btn" onclick="this.closest('tr').remove()">حذف</button></td>
-  `;
-  tbody.appendChild(tr);
+ const tr=document.createElement('tr');
+ tr.innerHTML=`
+  <td><input list="product-list" name="product_${id}" required></td>
+  <td><input type="number" name="quantity_${id}" min="1" required></td>
+  <td>
+    <input name="weight_${id}" placeholder="مثال: 325غ أو 1كغ">
+  </td>
+  <td><button type="button" class="remove-btn" onclick="this.closest('tr').remove()">حذف</button></td>
+ `;
+ tbody.appendChild(tr);
 
-  document.getElementById(productInputId).addEventListener('input', function() {
-    const selected = this.value.trim();
-    const weightSelect = document.getElementById(weightSelectId);
-    
-    if (productWeights[selected]) {
-      weightSelect.value = productWeights[selected];
-    } else {
-      weightSelect.value = "";
-    }
-  });
-
-  rowCounter++;
+ tr.querySelector(`[name="product_${id}"]`).addEventListener('input',e=>{
+   const w=productWeights[e.target.value.trim()];
+   if(w) tr.querySelector(`[name="weight_${id}"]`).value=w;
+ });
 }
 
 addRow();
 
-document.getElementById('orderForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.textContent = 'جاري الإرسال...';
+document.getElementById('orderForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ const btn=document.getElementById('submitBtn');
+ btn.disabled=true;
+ btn.textContent='جاري الإرسال...';
 
-  const formData = new FormData(this);
+ const itemsCount=document.querySelectorAll('#itemsBody tr').length;
 
-  fetch('https://script.google.com/macros/s/AKfycbzZhYFeTwTnh9VtoxmTWlSXeQKLvskfKxjBfvmf8_p9H6NIO2_uGurZ8FKF5npKVqeYvA/exec', {
-    method: 'POST',
-    body: formData
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.status === 'success') {
-      alert('تم إرسال الطلب بنجاح\nعدد الأصناف: ' + (rowCounter));
-      document.getElementById('orderForm').reset();
-      document.getElementById('itemsBody').innerHTML = '';
-      rowCounter = 0;
-      addRow();
-    } else {
-      alert('حصل خطأ\n' + (data.message || 'حاول مرة أخرى'));
-    }
-  })
-  .catch(err => {
-    alert('مشكلة في الاتصال\n' + err.message);
-  })
-  .finally(() => {
-    btn.disabled = false;
-    btn.textContent = 'إرسال الطلب';
-  });
+ fetch('YOUR_SCRIPT_URL',{method:'POST',body:new FormData(this)})
+ .then(r=>r.json())
+ .then(()=>alert('تم الإرسال ✅\nعدد الأصناف: '+itemsCount))
+ .catch(()=>alert('خطأ بالاتصال'))
+ .finally(()=>{
+   btn.disabled=false;
+   btn.textContent='إرسال الطلب';
+ });
 });
 </script>
 </body>
