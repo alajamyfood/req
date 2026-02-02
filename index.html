@@ -105,7 +105,7 @@
       color:white; border:none; border-radius:12px; cursor:pointer;
     }
 
-    /* موبايل - التحسين النهائي */
+    /* موبايل - عرض مثالي بدون ليبلز + زر حذف داخل البطاقة */
     @media (max-width: 580px) {
       body { padding: 8px 6px; }
       .container { padding: 18px 14px; border-radius: 16px; max-width: 100%; }
@@ -115,9 +115,9 @@
       label { font-size: 1rem; margin-bottom: 6px; }
       input, select, textarea { padding: 12px; font-size: 1rem; border-radius: 8px; }
       table { margin: 8px 0 16px; }
-      /* بطاقات عمودية بدون ليبلز فوق (الهنت كافي) */
+      /* بطاقات عمودية بدون ليبلز */
       table, thead, tbody, th, td, tr { display: block; }
-      thead tr { display: none; }
+      thead { display: none; }
       tr { 
         position: relative;
         margin-bottom: 20px; 
@@ -136,27 +136,30 @@
         word-break: break-word; 
       }
       td:first-child { 
-        padding-top: 40px; /* مساحة لزر الحذف فوق */
+        padding-top: 40px; /* مساحة لزر الحذف */
         font-weight: 500; 
-      }
-      td:nth-child(2), td:nth-child(3) { 
-        padding-top: 8px; 
       }
       .remove-btn { 
         top: 10px; 
-        left: 10px; 
+        left: 10px; /* على اليسار داخل البطاقة */
       }
       .add-btn { padding: 12px; font-size: 1rem; }
       button[type="submit"] { padding: 14px; font-size: 1.1rem; }
     }
 
-    /* كمبيوتر */
-    @media (min-width: 900px) {
+    /* كمبيوتر - زر الحذف داخل الجدول */
+    @media (min-width: 581px) {
       .container { padding: 32px 40px; max-width: 800px; }
       .logo-img { max-width: 360px; }
       h2 { font-size: 2.2rem; margin-bottom: 32px; }
-      th, td { padding: 14px 12px; font-size: 1.1rem; }
-      input, select, textarea { padding: 16px; font-size: 1.1rem; }
+      th, td { padding: 14px 12px; font-size: 1.1rem; position: relative; }
+      .remove-btn { 
+        position: relative; 
+        top: auto; 
+        left: auto; 
+        margin: 0 auto; 
+        display: block; 
+      }
       .add-btn { font-size: 1.15rem; padding: 16px; }
       button[type="submit"] { padding: 18px; font-size: 1.3rem; }
     }
