@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
   <title>طلب منتجات العجمي</title>
 
-  <!-- الأيقونات نسبية (بدون /) -->
-  <link rel="icon" href="favicon.ico">
-  <link rel="icon" sizes="32x32" href="favicon-32x32.png">
+  <!-- الأيقونات نسبية (شغالة على GitHub Pages) -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="icon" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
 
   <!-- مشاركة -->
   <meta property="og:title" content="طلب منتجات العجمي">
@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="logo.png">
 
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -27,6 +27,7 @@
       --turquoise-light: #83c5be;
       --turquoise-pale: #e0f7f4;
       --text-dark: #0d1f1f;
+      --blur-bg: rgba(255,255,255,0.94);
       --border: #a0d4cf;
     }
     * { box-sizing:border-box; margin:0; padding:0; }
@@ -44,81 +45,125 @@
       background-size: cover;
       color: var(--text-dark);
       min-height: 100vh;
-      padding: 8px 6px;
+      padding: 12px 8px;
     }
     .container {
-      background: rgba(255,255,255,0.94);
+      background: var(--blur-bg);
       border-radius: 18px;
-      padding: 20px 14px;
+      padding: 24px 20px;
       width: 100%;
-      max-width: 100%;
-      margin: 10px auto;
+      max-width: 720px;
+      margin: 20px auto;
       box-shadow: 0 10px 35px rgba(0,109,119,.25);
     }
-    .header { text-align:center; margin-bottom:16px; }
-    .logo-img { max-width: 240px; width: 100%; height: auto; margin: 0 auto; display: block; }
-    .since { color: var(--turquoise-dark); font-weight: 600; margin-top: 6px; font-size: 0.95rem; }
-    h2 { text-align: center; color: var(--turquoise-dark); margin-bottom: 18px; font-size: 1.55rem; }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.98rem; }
+    .header { text-align:center; margin-bottom:24px; }
+    .logo-img { max-width: 320px; width: 100%; height: auto; margin: 0 auto; display: block; }
+    .since { color: var(--turquoise-dark); font-weight: 600; margin-top: 8px; font-size: 1.1rem; }
+    h2 { text-align: center; color: var(--turquoise-dark); margin-bottom: 24px; font-size: 1.9rem; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 1.05rem; }
     input, select, textarea {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 1.05rem;
     }
-    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    th, td { padding: 10px 6px; text-align: right; border-bottom: 1px solid #eee; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
+    th, td { padding: 12px 10px; text-align: right; border-bottom: 1px solid #eee; font-size: 1.05rem; }
+    th { background: rgba(17,157,164,0.08); font-weight: 600; color: #0d5a5f; }
     .add-btn, .remove-btn, button[type="submit"] {
       border: none;
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 10px;
     }
     .add-btn {
       width: 100%;
       background: var(--turquoise-medium);
       color: #fff;
-      padding: 12px;
-      margin-top: 10px;
+      padding: 14px;
+      font-size: 1.1rem;
+      margin-top: 12px;
     }
     .remove-btn {
       background: #e74c3c;
       color: #fff;
-      padding: 6px 10px;
-      font-size: .85rem;
+      padding: 8px 14px;
+      font-size: 0.9rem;
     }
     button[type="submit"] {
       width: 100%;
-      padding: 14px;
-      margin-top: 18px;
-      font-size: 1.1rem;
+      padding: 16px;
+      margin-top: 24px;
+      font-size: 1.2rem;
       font-weight: 700;
       background: linear-gradient(90deg, var(--turquoise-medium), var(--turquoise-light));
       color: white;
     }
 
-    /* موبايل - تحسين كامل */
+    /* موبايل - عرض مثالي */
     @media (max-width: 580px) {
-      body { padding: 6px 4px; }
-      .container { padding: 16px 12px; border-radius: 14px; }
-      .logo-img { max-width: 200px; }
-      h2 { font-size: 1.4rem; margin-bottom: 14px; }
-      .form-group { margin-bottom: 14px; }
-      label { font-size: 0.93rem; margin-bottom: 4px; }
-      input, select, textarea { padding: 11px; font-size: 0.98rem; }
-      table { margin: 6px 0 10px; }
+      body { padding: 8px 6px; }
+      .container { padding: 18px 14px; border-radius: 16px; max-width: 100%; }
+      .logo-img { max-width: 220px; }
+      h2 { font-size: 1.5rem; margin-bottom: 18px; }
+      .form-group { margin-bottom: 16px; }
+      label { font-size: 1rem; margin-bottom: 6px; }
+      input, select, textarea { padding: 12px; font-size: 1rem; }
+      table { margin: 8px 0 16px; }
       table, thead, tbody, th, td, tr { display: block; }
       thead tr { position: absolute; top: -9999px; left: -9999px; }
-      tr { margin-bottom: 14px; border: 1px solid #ddd; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 8px; }
-      td { border: none; border-bottom: 1px solid #f5f5f5; position: relative; padding: 11px 6px 11px 48%; text-align: right; font-size: 0.97rem; word-break: break-word; }
-      td:before { position: absolute; top: 11px; left: 6px; width: 45%; padding-right: 6px; white-space: nowrap; font-weight: 600; color: var(--turquoise-dark); font-size: 0.93rem; }
+      tr { 
+        margin-bottom: 16px; 
+        border: 1px solid #ddd; 
+        border-radius: 12px; 
+        background: white; 
+        box-shadow: 0 3px 12px rgba(0,0,0,0.08); 
+        padding: 12px 10px; 
+      }
+      td { 
+        border: none; 
+        border-bottom: 1px solid #f0f0f0; 
+        position: relative; 
+        padding: 12px 8px 12px 50%; 
+        text-align: right; 
+        font-size: 1rem; 
+        word-break: break-word; 
+      }
+      td:before { 
+        position: absolute; 
+        top: 12px; 
+        left: 8px; 
+        width: 45%; 
+        padding-right: 8px; 
+        white-space: nowrap; 
+        font-weight: 600; 
+        color: var(--turquoise-dark); 
+        font-size: 0.98rem; 
+      }
       td:nth-of-type(1):before { content: "المنتج"; }
       td:nth-of-type(2):before { content: "الكمية"; }
       td:nth-of-type(3):before { content: "الوزن"; }
-      .remove-btn { position: absolute; top: 6px; right: 6px; padding: 7px 10px; font-size: 0.8rem; }
-      .add-btn { padding: 11px; font-size: 0.98rem; }
-      button[type="submit"] { padding: 13px; font-size: 1.08rem; }
+      .remove-btn { 
+        position: absolute; 
+        top: 8px; 
+        right: 8px; 
+        padding: 8px 12px; 
+        font-size: 0.85rem; 
+      }
+      .add-btn { padding: 12px; font-size: 1rem; }
+      button[type="submit"] { padding: 14px; font-size: 1.1rem; }
+    }
+
+    /* كمبيوتر - عرض واسع ومريح */
+    @media (min-width: 900px) {
+      .container { padding: 32px 40px; max-width: 800px; }
+      .logo-img { max-width: 360px; }
+      h2 { font-size: 2.2rem; margin-bottom: 32px; }
+      th, td { padding: 14px 12px; font-size: 1.1rem; }
+      input, select, textarea { padding: 16px; font-size: 1.1rem; }
+      .add-btn { font-size: 1.15rem; padding: 16px; }
+      button[type="submit"] { padding: 18px; font-size: 1.3rem; }
     }
   </style>
 </head>
@@ -225,6 +270,7 @@ const productWeights = {
 };
 
 let rowCounter = 0;
+
 function addRow() {
   const tbody = document.getElementById('itemsBody');
   const id = rowCounter++;
