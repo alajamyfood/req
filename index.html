@@ -328,6 +328,49 @@ addRow();
 
 document.getElementById('orderForm').addEventListener('submit', function(e) {
   e.preventDefault();
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري الإرسال...';
+
+  const formData = new FormData(this);
+
+  const formBody = new URLSearchParams();
+
+  formBody.append("governorate", formData.get("governorate"));
+  formBody.append("customerName", formData.get("customerName"));
+  formBody.append("notes", formData.get("notes") || "");
+
+  let i = 0;
+  while (formData.get("product_" + i)) {
+    formBody.append("product_" + i, formData.get("product_" + i));
+    formBody.append("quantity_" + i, formData.get("quantity_" + i));
+    formBody.append("weight_" + i, formData.get("weight_" + i));
+    i++;
+  }
+
+  fetch('https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec', {
+    method: 'POST',
+    body: formBody
+  })
+  .then(r => r.json())
+  .then(() => {
+    alert('تم إرسال الطلب بنجاح ✅');
+    document.getElementById('orderForm').reset();
+    document.getElementById('itemsBody').innerHTML = '';
+    rowCounter = 0;
+    addRow();
+  })
+  .catch(err => {
+    console.error(err);
+    alert('خطأ بالاتصال');
+  })
+  .finally(() => {
+    btn.disabled = false;
+    btn.textContent = 'إرسال الطلب';
+  });
+});
+  e.preventDefault();
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'جاري الإرسال...';
