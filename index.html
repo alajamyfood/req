@@ -355,10 +355,22 @@ const payload = {
 
 fetch('https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec', {
   method: 'POST',
-  body: JSON.stringify(payload),
-  headers: { "Content-Type": "application/json" }
-})
+  const formBody = new URLSearchParams();
 
+formBody.append("governorate", payload.governorate);
+formBody.append("customerName", payload.customerName);
+formBody.append("notes", payload.notes);
+
+payload.products.forEach((p,i)=>{
+  formBody.append("product_"+i, p);
+  formBody.append("quantity_"+i, payload.quantities[i]);
+  formBody.append("weight_"+i, payload.weights[i]);
+});
+
+fetch('https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec', {
+  method: 'POST',
+  body: formBody
+})
   .then(r => r.json())
   .then(() => {
     alert('تم إرسال الطلب بنجاح ✅');
