@@ -2,15 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>طلب منتجات العجمي</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
+  <title>نموذج طلب منتجات العجمي</title>
 
-  <link rel="icon" href="favicon.ico">
-  <link rel="icon" sizes="32x32" href="favicon-32x32.png">
+  <!-- الأيقونات نسبية -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="icon" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
 
-  <meta property="og:title" content="طلب منتجات العجمي">
+  <!-- مشاركة -->
+  <meta property="og:title" content="نموذج طلب منتجات العجمي">
   <meta property="og:description" content="اطلب منتجات العجمي الأصلية بسهولة">
   <meta property="og:image" content="logo.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -29,10 +31,18 @@
       --border: #a0d4cf;
     }
     * { box-sizing:border-box; margin:0; padding:0; }
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
     body {
       font-family: 'Tajawal', sans-serif;
       background: linear-gradient(to bottom, var(--turquoise-dark), var(--turquoise-pale));
       background-attachment: fixed;
+      background-size: cover;
       color: var(--text-dark);
       min-height: 100vh;
       padding: 10px 8px;
@@ -40,25 +50,30 @@
     .container {
       background: var(--blur-bg);
       backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 20px 16px;
-      max-width: 640px;
-      margin: auto;
-      box-shadow: 0 10px 35px rgba(0,109,119,.28);
+      border-radius: 18px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 720px;
+      margin: 20px auto;
+      box-shadow: 0 10px 35px rgba(0,109,119,.25);
+      border: 1px solid rgba(131,197,190,0.3);
     }
-    .header { text-align:center; margin-bottom:20px; }
-    .logo-img { max-width:260px; height:auto; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,0.18); display:block; margin:0 auto 10px; }
-    h2 { text-align:center; color:var(--turquoise-dark); font-size:1.6rem; font-weight:700; margin-bottom:20px; }
-    .form-group { margin-bottom:20px; }
-    label { display:block; margin-bottom:6px; font-weight:600; color:#0d3b3b; font-size:1rem; }
+    .header { text-align:center; margin-bottom:24px; }
+    .logo-img { max-width: 320px; width: 100%; height: auto; margin: 0 auto; display: block; }
+    .since { color: var(--turquoise-dark); font-weight: 600; margin-top: 8px; font-size: 1.1rem; }
+    h2 { text-align:center; color: var(--turquoise-dark); margin-bottom: 24px; font-size: 1.9rem; }
+    .form-group { margin-bottom: 20px; }
+    label { display:block; margin-bottom: 8px; font-weight: 600; font-size: 1.05rem; }
     input, select, textarea {
-      width:100%; padding:12px; border:1px solid var(--border); border-radius:10px;
-      background:white; font-size:1rem;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 1.05rem;
     }
-    input:focus, select:focus { outline:none; border-color:var(--turquoise-medium); box-shadow:0 0 0 3px rgba(17,157,164,0.18); }
-    table { width:100%; border-collapse:collapse; margin:10px 0 16px; }
-    th, td { padding:10px 6px; text-align:right; border-bottom:1px solid #e0f0ef; }
-    th { background:rgba(17,157,164,0.08); font-weight:600; color:#0d5a5f; font-size:0.95rem; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
+    th, td { padding: 12px 10px; text-align: right; border-bottom: 1px solid #eee; font-size: 1.05rem; }
+    th { background: rgba(17,157,164,0.08); font-weight: 600; color: #0d5a5f; }
     .remove-btn { 
       background:#e74c3c; 
       color:white; 
@@ -68,46 +83,80 @@
       cursor:pointer; 
       font-size:0.9rem; 
       position: absolute; 
-      top: 8px; 
-      left: 8px; 
+      top: 10px; 
+      left: 10px; 
       z-index: 10;
     }
     .remove-btn:hover { background:#c0392b; }
-    .add-btn { background:var(--turquoise-medium); color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; font-size:1.05rem; width:100%; margin-top:10px; }
-    .add-btn:hover { background:var(--turquoise-light); }
+    .add-btn { 
+      background:var(--turquoise-medium); 
+      color:white; 
+      border:none; 
+      padding:14px; 
+      border-radius:10px; 
+      cursor:pointer; 
+      font-size:1.1rem; 
+      width:100%; 
+      margin-top:12px; 
+    }
     button[type="submit"] {
-      width:100%; padding:14px; background:linear-gradient(90deg, var(--turquoise-medium), var(--turquoise-light));
-      color:white; border:none; border-radius:12px; font-size:1.2rem; font-weight:700; cursor:pointer;
-      margin-top:20px; box-shadow:0 5px 18px rgba(17,157,164,0.35);
+      width:100%; padding:16px; margin-top:24px; font-size:1.2rem; font-weight:700;
+      background:linear-gradient(90deg, var(--turquoise-medium), var(--turquoise-light));
+      color:white; border:none; border-radius:12px; cursor:pointer;
+    }
+    .note {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #444;
+      margin-top: 12px;
+      line-height: 1.4;
     }
 
+    /* موبايل */
     @media (max-width: 580px) {
       body { padding: 8px 6px; }
-      .container { padding: 16px 12px; max-width: 100%; border-radius: 16px; }
-      h2 { font-size: 1.45rem; margin-bottom: 16px; }
+      .container { padding: 18px 14px; border-radius: 16px; max-width: 100%; }
       .logo-img { max-width: 220px; }
+      h2 { font-size: 1.5rem; margin-bottom: 18px; }
       .form-group { margin-bottom: 16px; }
-      label { font-size: 0.95rem; margin-bottom: 4px; }
-      input, select, textarea { padding: 12px; font-size: 1rem; border-radius: 8px; }
-      table { margin: 8px 0 12px; }
+      label { font-size: 1rem; margin-bottom: 6px; }
+      input, select, textarea { padding: 12px; font-size: 1rem; }
+      table { margin: 8px 0 16px; }
       table, thead, tbody, th, td, tr { display: block; }
-      thead tr { position: absolute; top: -9999px; left: -9999px; }
-      tr { margin-bottom: 16px; border: 1px solid #ddd; border-radius: 10px; background: white; box-shadow: 0 3px 10px rgba(0,0,0,0.08); padding: 8px; }
-      td { border: none; border-bottom: 1px solid #f0f0f0; position: relative; padding: 12px 8px 12px 45%; text-align: right; font-size: 1rem; min-height: 44px; }
-      td:before { position: absolute; top: 12px; right: 8px; width: 42%; padding-right: 8px; white-space: nowrap; font-weight: 600; color: var(--turquoise-dark); font-size: 0.95rem; }
-      td:nth-of-type(1):before { content: "المنتج"; }
-      td:nth-of-type(2):before { content: "الكمية"; }
-      td:nth-of-type(3):before { content: "الوزن"; }
-      .remove-btn { position: absolute; top: 8px; left: 8px; padding: 8px 12px; font-size: 0.85rem; }
+      thead { display: none; }
+      tr { 
+        position: relative;
+        margin-bottom: 20px; 
+        border: 1px solid #ddd; 
+        border-radius: 14px; 
+        background: white; 
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08); 
+        padding: 16px 12px 12px 12px; 
+        min-height: 120px; 
+      }
+      td { 
+        border: none; 
+        padding: 12px 0; 
+        text-align: right; 
+        font-size: 1rem; 
+        word-break: break-word; 
+      }
+      td:first-child { padding-top: 40px; font-weight: 500; }
+      .remove-btn { top: 10px; left: 10px; }
       .add-btn { padding: 12px; font-size: 1rem; }
       button[type="submit"] { padding: 14px; font-size: 1.1rem; }
+      .note { font-size: 0.9rem; margin-top: 10px; }
     }
 
+    /* كمبيوتر */
     @media (min-width: 581px) {
-      .container { padding: 30px 24px; max-width: 800px; }
-      .logo-img { max-width: 340px; }
-      h2 { font-size: 2.1rem; }
+      .container { padding: 32px 40px; max-width: 800px; }
+      .logo-img { max-width: 360px; }
+      h2 { font-size: 2.2rem; margin-bottom: 32px; }
+      th, td { padding: 14px 12px; font-size: 1.1rem; }
       .remove-btn { position: relative; top: auto; left: auto; margin: 0 auto; display: block; }
+      .add-btn { font-size: 1.15rem; padding: 16px; }
+      button[type="submit"] { padding: 18px; font-size: 1.3rem; }
     }
   </style>
 </head>
@@ -115,28 +164,25 @@
 
 <div class="container">
   <div class="header">
-    <img src="logo.png" alt="العجمي" class="logo-img">
+    <img src="logo.png" class="logo-img" alt="العجمي">
+    <div class="since">Since 1989 • Al Ajamy</div>
   </div>
-
-  <h2>طلب منتجات</h2>
-
+  <h2>نموذج طلب منتجات</h2>
   <form id="orderForm">
     <div class="form-group">
-      <label for="governorate">المحافظة / المدينة *</label>
-      <input type="text" id="governorate" name="governorate" placeholder="مثال: غازي عنتاب – قونيا – أنطاليا – إسطنبول" required>
+      <label>المحافظة / المدينة *</label>
+      <input type="text" name="governorate" placeholder="مثال: غازي عنتاب – قونيا – أنطاليا – إسطنبول" required>
     </div>
-
     <div class="form-group">
-      <label for="customerName">اسم الزبون *</label>
-      <input type="text" id="customerName" name="customerName" placeholder="مثال: محمد أحمد" required>
+      <label>اسم الزبون *</label>
+      <input type="text" name="customerName" placeholder="مثال: محمد أحمد" required>
     </div>
-
     <div class="form-group">
       <label>تفاصيل المنتجات المطلوبة</label>
       <table>
         <thead>
           <tr>
-            <th>نوع المنتج</th>
+            <th>المنتج</th>
             <th>الكمية</th>
             <th>الوزن</th>
             <th></th>
@@ -146,13 +192,14 @@
       </table>
       <button type="button" class="add-btn" onclick="addRow()">+ إضافة صنف</button>
     </div>
-
     <div class="form-group">
-      <label for="notes">ملاحظات إضافية</label>
-      <textarea id="notes" name="notes" rows="3" placeholder="أي تعليقات أو تفاصيل إضافية..."></textarea>
+      <label>ملاحظات</label>
+      <textarea name="notes" placeholder="أي تعليقات أو تفاصيل إضافية (اختياري)"></textarea>
     </div>
-
     <button type="submit" id="submitBtn">إرسال الطلب</button>
+    <div class="note">
+      في حال وجود أي استفسار عن كيفية تعبئة الطلب التواصل على الواتس 00905345758221
+    </div>
   </form>
 </div>
 
@@ -188,6 +235,7 @@
 </datalist>
 
 <script>
+// كائن الوزن التلقائي
 const productWeights = {
   "001 عجمي حمص بالطحينة 325غ": "325 غرام",
   "002 عجمي كريم الثوم 230غ": "230 غرام",
@@ -260,11 +308,10 @@ function addRow() {
   `;
   tbody.appendChild(tr);
 
-  tr.querySelector(`[name="product[${index}]"]`).addEventListener('input', function(e) {
+  tr.querySelector(`[name="product[${index}]"]`).addEventListener('input', e => {
     const w = productWeights[e.target.value.trim()];
     if (w) tr.querySelector(`[name="weight[${index}]"]`).value = w;
   });
-
   rowCounter++;
 }
 addRow();
@@ -276,26 +323,21 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
   btn.textContent = 'جاري الإرسال...';
 
   const formData = new FormData(this);
+  const itemsCount = document.querySelectorAll('#itemsBody tr').length;
 
   fetch('https://script.google.com/macros/s/AKfycbzZhYFeTwTnh9VtoxmTWlSXeQKLvskfKxjBfvmf8_p9H6NIO2_uGurZ8FKF5npKVqeYvA/exec', {
     method: 'POST',
     body: formData
   })
   .then(r => r.json())
-  .then(data => {
-    if (data.status === 'success') {
-      alert('تم إرسال الطلب بنجاح\nعدد الأصناف: ' + document.querySelectorAll('#itemsBody tr').length);
-      document.getElementById('orderForm').reset();
-      document.getElementById('itemsBody').innerHTML = '';
-      rowCounter = 0;
-      addRow();
-    } else {
-      alert('حصل خطأ\n' + (data.message || 'حاول مرة أخرى'));
-    }
+  .then(() => {
+    alert(`تم إرسال الطلب بنجاح ✅\nعدد الأصناف: ${itemsCount}`);
+    document.getElementById('orderForm').reset();
+    document.getElementById('itemsBody').innerHTML = '';
+    rowCounter = 0;
+    addRow();
   })
-  .catch(err => {
-    alert('مشكلة في الاتصال\n' + err.message);
-  })
+  .catch(() => alert('خطأ بالاتصال'))
   .finally(() => {
     btn.disabled = false;
     btn.textContent = 'إرسال الطلب';
