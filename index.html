@@ -229,15 +229,19 @@ function addRow() {
   `;
   tbody.appendChild(tr);
 
+  // التعبئة التلقائية للوزن
   tr.querySelector(`[name="product[${index}]"]`).addEventListener('input', function(e) {
     const selected = e.target.value.trim();
     const weightSelect = tr.querySelector(`[name="weight[${index}]"]`);
     if (productWeights[selected]) {
       weightSelect.value = productWeights[selected];
+    } else {
+      weightSelect.value = "";
     }
   });
 
   rowCounter++;
+}
 }
 addRow();
 
