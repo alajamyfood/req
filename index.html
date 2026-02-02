@@ -112,7 +112,7 @@
       line-height: 1.4;
     }
 
-    /* موبايل - بدون ليبلز في الأصناف */
+    /* موبايل */
     @media (max-width: 580px) {
       body { padding: 8px 6px; }
       .container { padding: 18px 14px; border-radius: 16px; max-width: 100%; }
@@ -120,7 +120,7 @@
       h2 { font-size: 1.5rem; margin-bottom: 18px; }
       .form-group { margin-bottom: 16px; }
       label { font-size: 1rem; margin-bottom: 6px; }
-      input, select, textarea { padding: 12px; font-size: 1rem; border-radius: 8px; }
+      input, select, textarea { padding: 12px; font-size: 1rem; }
       table { margin: 8px 0 16px; }
       table, thead, tbody, th, td, tr { display: block; }
       thead { display: none; }
@@ -141,14 +141,8 @@
         font-size: 1rem; 
         word-break: break-word; 
       }
-      td:first-child { 
-        padding-top: 40px; 
-        font-weight: 500; 
-      }
-      .remove-btn { 
-        top: 10px; 
-        left: 10px; 
-      }
+      td:first-child { padding-top: 40px; font-weight: 500; }
+      .remove-btn { top: 10px; left: 10px; }
       .add-btn { padding: 12px; font-size: 1rem; }
       button[type="submit"] { padding: 14px; font-size: 1.1rem; }
       .note { font-size: 0.9rem; margin-top: 10px; }
@@ -159,14 +153,8 @@
       .container { padding: 32px 40px; max-width: 800px; }
       .logo-img { max-width: 360px; }
       h2 { font-size: 2.2rem; margin-bottom: 32px; }
-      th, td { padding: 14px 12px; font-size: 1.1rem; position: relative; }
-      .remove-btn { 
-        position: relative; 
-        top: auto; 
-        left: auto; 
-        margin: 0 auto; 
-        display: block; 
-      }
+      th, td { padding: 14px 12px; font-size: 1.1rem; }
+      .remove-btn { position: relative; top: auto; left: auto; margin: 0 auto; display: block; }
       .add-btn { font-size: 1.15rem; padding: 16px; }
       button[type="submit"] { padding: 18px; font-size: 1.3rem; }
     }
@@ -283,13 +271,13 @@ let rowCounter = 0;
 
 function addRow() {
   const tbody = document.getElementById('itemsBody');
-  const id = rowCounter++;
+  const index = rowCounter++;
   const tr = document.createElement('tr');
   tr.innerHTML = `
     <td>
       <input 
         list="product-list" 
-        name="product_${id}" 
+        name="product[${index}]" 
         placeholder="اكتب أو اختر المنتج (مثال: 001 عجمي...)" 
         required
       >
@@ -297,14 +285,14 @@ function addRow() {
     <td>
       <input 
         type="number" 
-        name="quantity_${id}" 
+        name="quantity[${index}]" 
         min="1" 
         placeholder="عدد الشنط / الطرود" 
         required
       >
     </td>
     <td>
-      <select name="weight_${id}">
+      <select name="weight[${index}]">
         <option value="" selected disabled hidden>اختر الوزن</option>
         <option>325 غرام</option>
         <option>230 غرام</option>
@@ -320,9 +308,9 @@ function addRow() {
   `;
   tbody.appendChild(tr);
 
-  tr.querySelector(`[name="product_${id}"]`).addEventListener('input', e => {
+  tr.querySelector(`[name="product[${index}]"]`).addEventListener('input', e => {
     const w = productWeights[e.target.value.trim()];
-    if (w) tr.querySelector(`[name="weight_${id}"]`).value = w;
+    if (w) tr.querySelector(`[name="weight[${index}]"]`).value = w;
   });
   rowCounter++;
 }
@@ -335,6 +323,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
   btn.textContent = 'جاري الإرسال...';
 
   const formData = new FormData(this);
+  const itemsCount = document.querySelectorAll('#itemsBody tr').length;
 
   fetch('https://script.google.com/macros/s/AKfycbzZhYFeTwTnh9VtoxmTWlSXeQKLvskfKxjBfvmf8_p9H6NIO2_uGurZ8FKF5npKVqeYvA/exec', {
     method: 'POST',
@@ -342,7 +331,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
   })
   .then(r => r.json())
   .then(() => {
-    alert('تم إرسال الطلب بنجاح ✅');
+    alert(`تم إرسال الطلب بنجاح ✅\nعدد الأصناف: ${itemsCount}`);
     document.getElementById('orderForm').reset();
     document.getElementById('itemsBody').innerHTML = '';
     rowCounter = 0;
