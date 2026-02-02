@@ -5,25 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>طلب منتجات العجمي</title>
 
-  <!-- الأيقونات في الجذر مباشرة -->
+  <!-- الأيقونات بالأسماء اللي رفعتها -->
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
 
-  <!-- Open Graph للمشاركة (فيسبوك، واتساب، إكس، تلغرام...) -->
+  <!-- Open Graph للمشاركة على واتساب/فيسبوك/إكس -->
   <meta property="og:title" content="طلب منتجات العجمي">
   <meta property="og:description" content="اطلب منتجات العجمي الأصلية بسهولة وسرعة">
-  <meta property="og:image" content="/og-image.jpg">
-  <meta property="og:url" content="https://yourdomain.com">
+  <meta property="og:image" content="/alajamy_logo.png">
+  <meta property="og:url" content="https://alajamyfood.github.io">
   <meta property="og:type" content="website">
 
   <!-- Twitter/X Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="طلب منتجات العجمي">
   <meta name="twitter:description" content="اطلب منتجات العجمي الأصلية بسهولة وسرعة">
-  <meta name="twitter:image" content="/og-image.jpg">
+  <meta name="twitter:image" content="/alajamy_logo.png">
 
   <style>
     :root {
@@ -70,7 +69,7 @@
     th { background:rgba(17,157,164,0.08); font-weight:600; color:#0d5a5f; }
     .remove-btn { background:#e74c3c; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.9rem; }
     .remove-btn:hover { background:#c0392b; }
-    .add-btn { background:var(--turquoise-medium); color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-size:1.05rem; }
+    .add-btn { background:var(--turquoise-medium); color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-size:1.05rem; margin-top:10px; }
     .add-btn:hover { background:var(--turquoise-light); }
     button[type="submit"] {
       width:100%; padding:14px; background:linear-gradient(90deg, var(--turquoise-medium), var(--turquoise-light));
@@ -79,11 +78,22 @@
     }
     button[type="submit"]:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 25px rgba(17,157,164,0.45); }
     button:disabled { opacity:0.65; cursor:not-allowed; }
+
     @media (max-width: 520px) {
-      .container { padding: 24px 18px; }
-      h2 { font-size: 1.6rem; }
-      .logo-img { max-width:220px; }
-      table { font-size: 0.95rem; }
+      .container { padding: 20px 12px; }
+      h2 { font-size: 1.5rem; }
+      .logo-img { max-width: 200px; }
+      table, thead, tbody, th, td, tr { display: block; }
+      thead tr { position: absolute; top: -9999px; left: -9999px; }
+      tr { margin: 0 0 15px 0; border: 1px solid #ccc; border-radius: 8px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+      td { border: none; border-bottom: 1px solid #eee; position: relative; padding: 12px 10px 12px 50%; text-align: right; font-size: 1rem; }
+      td:before { position: absolute; top: 12px; left: 10px; width: 45%; padding-right: 10px; white-space: nowrap; font-weight: bold; color: var(--turquoise-dark); }
+      td:nth-of-type(1):before { content: "المنتج"; }
+      td:nth-of-type(2):before { content: "الكمية"; }
+      td:nth-of-type(3):before { content: "الوزن"; }
+      .remove-btn { position: absolute; top: 10px; right: 10px; padding: 8px 12px; }
+      input, select { font-size: 1rem; padding: 12px; }
+      .add-btn { width: 100%; padding: 12px; font-size: 1.1rem; }
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -92,7 +102,7 @@
 
 <div class="container">
   <div class="header">
-    <img src="/logo.png" alt="العجمي" class="logo-img">
+    <img src="/alajamy_logo.png" alt="العجمي" class="logo-img">
     <div class="since">Since 1989 • Al Ajamy</div>
   </div>
 
