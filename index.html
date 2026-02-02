@@ -20,149 +20,94 @@
 
   <style>
     :root {
-      --main: #006d77;
-      --light: #83c5be;
+      --turquoise-dark: #006d77;
+      --turquoise-medium: #119da4;
+      --turquoise-light: #83c5be;
+      --turquoise-pale: #e0f7f4;
+      --text-dark: #0d1f1f;
+      --blur-bg: rgba(255,255,255,0.94);
       --border: #a0d4cf;
     }
+    * { box-sizing:border-box; margin:0; padding:0; }
     body {
       font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(to bottom, var(--main), #e0f7f4);
-      padding: 10px 8px;
-      margin: 0;
+      background: linear-gradient(to bottom, var(--turquoise-dark), var(--turquoise-pale));
+      background-attachment: fixed;
+      color: var(--text-dark);
       min-height: 100vh;
+      padding: 10px 8px;
     }
     .container {
-      background: rgba(255,255,255,.92);
+      background: var(--blur-bg);
+      backdrop-filter: blur(12px);
       border-radius: 20px;
       padding: 20px 16px;
       max-width: 640px;
       margin: auto;
       box-shadow: 0 10px 35px rgba(0,109,119,.28);
     }
-    .logo-img {
-      max-width: 260px;
-      display: block;
-      margin: 0 auto 12px;
-    }
-    h2 {
-      text-align: center;
-      color: var(--main);
-      margin-bottom: 20px;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
+    .header { text-align:center; margin-bottom:20px; }
+    .logo-img { max-width:260px; height:auto; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,0.18); display:block; margin:0 auto 10px; }
+    h2 { text-align:center; color:var(--turquoise-dark); font-size:1.6rem; font-weight:700; margin-bottom:20px; }
+    .form-group { margin-bottom:20px; }
+    label { display:block; margin-bottom:6px; font-weight:600; color:#0d3b3b; font-size:1rem; }
     input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 1rem;
+      width:100%; padding:12px; border:1px solid var(--border); border-radius:10px;
+      background:white; font-size:1rem;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0 16px;
+    input:focus, select:focus { outline:none; border-color:var(--turquoise-medium); box-shadow:0 0 0 3px rgba(17,157,164,0.18); }
+    table { width:100%; border-collapse:collapse; margin:10px 0 16px; }
+    th, td { padding:10px 6px; text-align:right; border-bottom:1px solid #e0f0ef; }
+    th { background:rgba(17,157,164,0.08); font-weight:600; color:#0d5a5f; font-size:0.95rem; }
+    .remove-btn { 
+      background:#e74c3c; 
+      color:white; 
+      border:none; 
+      padding:8px 12px; 
+      border-radius:6px; 
+      cursor:pointer; 
+      font-size:0.9rem; 
+      position: absolute; 
+      top: 8px; 
+      left: 8px; 
+      z-index: 10;
     }
-    th, td {
-      padding: 10px 6px;
-      text-align: right;
-      border-bottom: 1px solid #e0f0ef;
-    }
-    .add-btn, .remove-btn, button[type="submit"] {
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-    .add-btn {
-      background: #119da4;
-      padding: 12px;
-      border-radius: 8px;
-      width: 100%;
-    }
-    .remove-btn {
-      background: #e74c3c;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
+    .remove-btn:hover { background:#c0392b; }
+    .add-btn { background:var(--turquoise-medium); color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; font-size:1.05rem; width:100%; margin-top:10px; }
+    .add-btn:hover { background:var(--turquoise-light); }
     button[type="submit"] {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(90deg, #119da4, #83c5be);
-      border-radius: 12px;
-      font-size: 1.2rem;
-      font-weight: 700;
+      width:100%; padding:14px; background:linear-gradient(90deg, var(--turquoise-medium), var(--turquoise-light));
+      color:white; border:none; border-radius:12px; font-size:1.2rem; font-weight:700; cursor:pointer;
+      margin-top:20px; box-shadow:0 5px 18px rgba(17,157,164,0.35);
     }
 
-    /* موبايل */
     @media (max-width: 580px) {
       body { padding: 8px 6px; }
-      .container { padding: 16px 12px; max-width: 100%; }
+      .container { padding: 16px 12px; max-width: 100%; border-radius: 16px; }
+      h2 { font-size: 1.45rem; margin-bottom: 16px; }
       .logo-img { max-width: 220px; }
-      h2 { font-size: 1.6rem; margin-bottom: 18px; }
-      label { font-size: 0.98rem; margin-bottom: 5px; }
-      input, select, textarea { padding: 12px; font-size: 1rem; }
-      table { margin: 10px 0 14px; }
+      .form-group { margin-bottom: 16px; }
+      label { font-size: 0.95rem; margin-bottom: 4px; }
+      input, select, textarea { padding: 12px; font-size: 1rem; border-radius: 8px; }
+      table { margin: 8px 0 12px; }
       table, thead, tbody, th, td, tr { display: block; }
       thead tr { position: absolute; top: -9999px; left: -9999px; }
-      tr {
-        position: relative;
-        margin-bottom: 16px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        background: white;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-        padding: 12px;
-      }
-      td {
-        border: none;
-        border-bottom: 1px solid #f0f0f0;
-        position: relative;
-        padding: 12px 8px 12px 45%;
-        text-align: right;
-        font-size: 1rem;
-      }
-      td:before {
-        position: absolute;
-        top: 12px;
-        right: 8px;
-        width: 42%;
-        font-weight: 600;
-        color: var(--main);
-        font-size: 0.95rem;
-      }
+      tr { margin-bottom: 16px; border: 1px solid #ddd; border-radius: 10px; background: white; box-shadow: 0 3px 10px rgba(0,0,0,0.08); padding: 8px; }
+      td { border: none; border-bottom: 1px solid #f0f0f0; position: relative; padding: 12px 8px 12px 45%; text-align: right; font-size: 1rem; min-height: 44px; }
+      td:before { position: absolute; top: 12px; right: 8px; width: 42%; padding-right: 8px; white-space: nowrap; font-weight: 600; color: var(--turquoise-dark); font-size: 0.95rem; }
       td:nth-of-type(1):before { content: "المنتج"; }
       td:nth-of-type(2):before { content: "الكمية"; }
       td:nth-of-type(3):before { content: "الوزن"; }
-      .remove-btn {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        padding: 8px 12px;
-        font-size: 0.85rem;
-      }
+      .remove-btn { position: absolute; top: 8px; left: 8px; padding: 8px 12px; font-size: 0.85rem; }
       .add-btn { padding: 12px; font-size: 1rem; }
       button[type="submit"] { padding: 14px; font-size: 1.1rem; }
     }
 
-    /* كمبيوتر */
     @media (min-width: 581px) {
       .container { padding: 30px 24px; max-width: 800px; }
       .logo-img { max-width: 340px; }
       h2 { font-size: 2.1rem; }
-      .remove-btn {
-        position: relative;
-        top: auto;
-        left: auto;
-        margin: 0 auto;
-        display: block;
-      }
+      .remove-btn { position: relative; top: auto; left: auto; margin: 0 auto; display: block; }
     }
   </style>
 </head>
@@ -170,25 +115,28 @@
 
 <div class="container">
   <div class="header">
-    <img src="logo.png" class="logo-img" alt="العجمي">
+    <img src="logo.png" alt="العجمي" class="logo-img">
   </div>
+
   <h2>طلب منتجات</h2>
 
   <form id="orderForm">
     <div class="form-group">
-      <label>المحافظة / المدينة *</label>
-      <input type="text" name="governorate" placeholder="مثال: غازي عنتاب – قونيا – أنطاليا – إسطنبول" required>
+      <label for="governorate">المحافظة / المدينة *</label>
+      <input type="text" id="governorate" name="governorate" placeholder="مثال: غازي عنتاب – قونيا – أنطاليا – إسطنبول" required>
     </div>
+
     <div class="form-group">
-      <label>اسم الزبون *</label>
-      <input type="text" name="customerName" placeholder="مثال: محمد أحمد" required>
+      <label for="customerName">اسم الزبون *</label>
+      <input type="text" id="customerName" name="customerName" placeholder="مثال: محمد أحمد" required>
     </div>
+
     <div class="form-group">
       <label>تفاصيل المنتجات المطلوبة</label>
       <table>
         <thead>
           <tr>
-            <th>المنتج</th>
+            <th>نوع المنتج</th>
             <th>الكمية</th>
             <th>الوزن</th>
             <th></th>
@@ -198,14 +146,13 @@
       </table>
       <button type="button" class="add-btn" onclick="addRow()">+ إضافة صنف</button>
     </div>
+
     <div class="form-group">
-      <label>ملاحظات</label>
-      <textarea name="notes" placeholder="أي تعليقات أو تفاصيل إضافية (اختياري)"></textarea>
+      <label for="notes">ملاحظات إضافية</label>
+      <textarea id="notes" name="notes" rows="3" placeholder="أي تعليقات أو تفاصيل إضافية..."></textarea>
     </div>
+
     <button type="submit" id="submitBtn">إرسال الطلب</button>
-    <div class="note">
-      في حال وجود أي استفسار عن كيفية تعبئة الطلب التواصل على الواتس 00905345758221
-    </div>
   </form>
 </div>
 
@@ -314,11 +261,8 @@ function addRow() {
   tbody.appendChild(tr);
 
   tr.querySelector(`[name="product[${index}]"]`).addEventListener('input', function(e) {
-    const selected = e.target.value.trim();
-    const weightSelect = tr.querySelector(`[name="weight[${index}]"]`);
-    if (productWeights[selected]) {
-      weightSelect.value = productWeights[selected];
-    }
+    const w = productWeights[e.target.value.trim()];
+    if (w) tr.querySelector(`[name="weight[${index}]"]`).value = w;
   });
 
   rowCounter++;
@@ -332,31 +276,25 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
   btn.textContent = 'جاري الإرسال...';
 
   const formData = new FormData(this);
-  const itemsCount = document.querySelectorAll('#itemsBody tr').length;
 
   fetch('https://script.google.com/macros/s/AKfycbzZhYFeTwTnh9VtoxmTWlSXeQKLvskfKxjBfvmf8_p9H6NIO2_uGurZ8FKF5npKVqeYvA/exec', {
     method: 'POST',
     body: formData
   })
-  .then(r => r.text())
-  .then(text => {
-    try {
-      const data = JSON.parse(text);
-      if (data.status === 'success') {
-        alert(`تم إرسال الطلب بنجاح ✅\nعدد الأصناف: ${itemsCount}`);
-        document.getElementById('orderForm').reset();
-        document.getElementById('itemsBody').innerHTML = '';
-        rowCounter = 0;
-        addRow();
-      } else {
-        alert('خطأ من السيرفر: ' + data.message);
-      }
-    } catch (e) {
-      alert('تم الإرسال ظاهريًا، تحقق من الشيت يدويًا.');
+  .then(r => r.json())
+  .then(data => {
+    if (data.status === 'success') {
+      alert('تم إرسال الطلب بنجاح\nعدد الأصناف: ' + document.querySelectorAll('#itemsBody tr').length);
+      document.getElementById('orderForm').reset();
+      document.getElementById('itemsBody').innerHTML = '';
+      rowCounter = 0;
+      addRow();
+    } else {
+      alert('حصل خطأ\n' + (data.message || 'حاول مرة أخرى'));
     }
   })
   .catch(err => {
-    alert('مشكلة في الاتصال: ' + err.message);
+    alert('مشكلة في الاتصال\n' + err.message);
   })
   .finally(() => {
     btn.disabled = false;
