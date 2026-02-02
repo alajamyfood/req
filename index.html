@@ -323,7 +323,6 @@ function addRow() {
     const w = productWeights[e.target.value.trim()];
     if (w) tr.querySelector(`[name="weight_${id}"]`).value = w;
   });
-  rowCounter++;
 }
 addRow();
 
