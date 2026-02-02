@@ -330,14 +330,20 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
     body: formData
   })
   .then(r => r.json())
-  .then(() => {
-    alert(`تم إرسال الطلب بنجاح ✅\nعدد الأصناف: ${itemsCount}`);
-    document.getElementById('orderForm').reset();
-    document.getElementById('itemsBody').innerHTML = '';
-    rowCounter = 0;
-    addRow();
+  .then(data => {
+    if (data.status === 'success') {
+      alert(`تم إرسال الطلب بنجاح ✅\nعدد الأصناف المرسلة: ${itemsCount}`);
+      document.getElementById('orderForm').reset();
+      document.getElementById('itemsBody').innerHTML = '';
+      rowCounter = 0;
+      addRow();
+    } else {
+      alert('حصل خطأ في الحفظ: ' + (data.message || 'غير معروف'));
+    }
   })
-  .catch(() => alert('خطأ بالاتصال'))
+  .catch(err => {
+    alert('مشكلة في الاتصال بالسيرفر: ' + err.message);
+  })
   .finally(() => {
     btn.disabled = false;
     btn.textContent = 'إرسال الطلب';
