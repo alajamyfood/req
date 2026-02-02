@@ -84,7 +84,7 @@
       font-size:0.9rem; 
       position: absolute; 
       top: 10px; 
-      left: 10px;  /* ← على اليسار */
+      left: 10px; 
       z-index: 10;
     }
     .remove-btn:hover { background:#c0392b; }
@@ -105,7 +105,7 @@
       color:white; border:none; border-radius:12px; cursor:pointer;
     }
 
-    /* موبايل - تحسين الطلب الجديد */
+    /* موبايل - التحسين النهائي */
     @media (max-width: 580px) {
       body { padding: 8px 6px; }
       .container { padding: 18px 14px; border-radius: 16px; max-width: 100%; }
@@ -113,10 +113,11 @@
       h2 { font-size: 1.5rem; margin-bottom: 18px; }
       .form-group { margin-bottom: 16px; }
       label { font-size: 1rem; margin-bottom: 6px; }
-      input, select, textarea { padding: 12px; font-size: 1rem; }
+      input, select, textarea { padding: 12px; font-size: 1rem; border-radius: 8px; }
       table { margin: 8px 0 16px; }
+      /* بطاقات عمودية بدون ليبلز فوق (الهنت كافي) */
       table, thead, tbody, th, td, tr { display: block; }
-      thead tr { position: absolute; top: -9999px; left: -9999px; }
+      thead tr { display: none; }
       tr { 
         position: relative;
         margin-bottom: 20px; 
@@ -125,32 +126,22 @@
         background: white; 
         box-shadow: 0 4px 14px rgba(0,0,0,0.08); 
         padding: 16px 12px 12px 12px; 
-        min-height: 110px; /* عشان يعطي مساحة للمنتج الطويل */
+        min-height: 120px; 
       }
       td { 
         border: none; 
-        border-bottom: 1px solid #f0f0f0; 
-        padding: 12px 0 12px 0; 
+        padding: 12px 0; 
         text-align: right; 
         font-size: 1rem; 
         word-break: break-word; 
       }
       td:first-child { 
         padding-top: 40px; /* مساحة لزر الحذف فوق */
+        font-weight: 500; 
       }
-      td:before { 
-        position: absolute; 
-        top: 12px; 
-        right: 12px; 
-        width: 45%; 
-        text-align: right;
-        font-weight: 600; 
-        color: var(--turquoise-dark); 
-        font-size: 0.98rem; 
+      td:nth-child(2), td:nth-child(3) { 
+        padding-top: 8px; 
       }
-      td:nth-of-type(1):before { content: "المنتج"; }
-      td:nth-of-type(2):before { content: "الكمية"; }
-      td:nth-of-type(3):before { content: "الوزن"; }
       .remove-btn { 
         top: 10px; 
         left: 10px; 
