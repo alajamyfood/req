@@ -5,22 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
   <title>طلب منتجات العجمي</title>
 
-  <!-- الأيقونات نسبية (شغالة على GitHub Pages) -->
+  <!-- الأيقونات نسبية -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
 
-  <!-- مشاركة (واتساب، فيسبوك، إكس) -->
+  <!-- مشاركة -->
   <meta property="og:title" content="طلب منتجات العجمي">
-  <meta property="og:description" content="اطلب منتجات العجمي الأصلية بسهولة وسرعة">
+  <meta property="og:description" content="اطلب منتجات العجمي الأصلية بسهولة">
   <meta property="og:image" content="logo.png">
-  <meta property="og:url" content="https://alajamyfood.github.io">
-  <meta property="og:type" content="website">
-
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="طلب منتجات العجمي">
-  <meta name="twitter:description" content="اطلب منتجات العجمي الأصلية بسهولة وسرعة">
   <meta name="twitter:image" content="logo.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -76,21 +71,41 @@
       border-radius: 10px;
       font-size: 1.05rem;
     }
-    input:focus, select:focus { outline:none; border-color:var(--turquoise-medium); box-shadow:0 0 0 3px rgba(17,157,164,0.2); }
     table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
     th, td { padding: 12px 10px; text-align: right; border-bottom: 1px solid #eee; font-size: 1.05rem; }
     th { background: rgba(17,157,164,0.08); font-weight: 600; color: #0d5a5f; }
-    .remove-btn { background:#e74c3c; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.9rem; }
+    .remove-btn { 
+      background:#e74c3c; 
+      color:white; 
+      border:none; 
+      padding:8px 14px; 
+      border-radius:6px; 
+      cursor:pointer; 
+      font-size:0.9rem; 
+      position: absolute; 
+      top: 8px; 
+      right: 8px; 
+      z-index: 10;
+    }
     .remove-btn:hover { background:#c0392b; }
-    .add-btn { background:var(--turquoise-medium); color:white; border:none; padding:14px; border-radius:10px; cursor:pointer; font-size:1.1rem; width:100%; margin-top:12px; }
-    .add-btn:hover { background:var(--turquoise-light); }
+    .add-btn { 
+      background:var(--turquoise-medium); 
+      color:white; 
+      border:none; 
+      padding:14px; 
+      border-radius:10px; 
+      cursor:pointer; 
+      font-size:1.1rem; 
+      width:100%; 
+      margin-top:12px; 
+    }
     button[type="submit"] {
       width:100%; padding:16px; margin-top:24px; font-size:1.2rem; font-weight:700;
       background:linear-gradient(90deg, var(--turquoise-medium), var(--turquoise-light));
       color:white; border:none; border-radius:12px; cursor:pointer;
     }
 
-    /* موبايل - عرض مثالي */
+    /* موبايل - تحسين كبير */
     @media (max-width: 580px) {
       body { padding: 8px 6px; }
       .container { padding: 18px 14px; border-radius: 16px; max-width: 100%; }
@@ -100,20 +115,48 @@
       label { font-size: 1rem; margin-bottom: 6px; }
       input, select, textarea { padding: 12px; font-size: 1rem; }
       table { margin: 8px 0 16px; }
+      /* بطاقات عمودية مع زر حذف فوق على اليمين */
       table, thead, tbody, th, td, tr { display: block; }
       thead tr { position: absolute; top: -9999px; left: -9999px; }
-      tr { margin-bottom: 16px; border: 1px solid #ddd; border-radius: 12px; background: white; box-shadow: 0 3px 12px rgba(0,0,0,0.08); padding: 12px 10px; }
-      td { border: none; border-bottom: 1px solid #f0f0f0; position: relative; padding: 12px 8px 12px 50%; text-align: right; font-size: 1rem; word-break: break-word; }
-      td:before { position: absolute; top: 12px; left: 8px; width: 45%; padding-right: 8px; white-space: nowrap; font-weight: 600; color: var(--turquoise-dark); font-size: 0.98rem; }
+      tr { 
+        position: relative;
+        margin-bottom: 16px; 
+        border: 1px solid #ddd; 
+        border-radius: 12px; 
+        background: white; 
+        box-shadow: 0 3px 12px rgba(0,0,0,0.08); 
+        padding: 16px 12px 12px; 
+      }
+      td { 
+        border: none; 
+        border-bottom: 1px solid #f0f0f0; 
+        padding: 12px 0 12px 50%; 
+        text-align: right; 
+        font-size: 1rem; 
+        word-break: break-word; 
+      }
+      td:before { 
+        position: absolute; 
+        top: 12px; 
+        right: 12px;  /* اليمين عشان عربي */
+        width: 45%; 
+        text-align: right;
+        font-weight: 600; 
+        color: var(--turquoise-dark); 
+        font-size: 0.98rem; 
+      }
       td:nth-of-type(1):before { content: "المنتج"; }
       td:nth-of-type(2):before { content: "الكمية"; }
       td:nth-of-type(3):before { content: "الوزن"; }
-      .remove-btn { position: absolute; top: 8px; right: 8px; padding: 8px 12px; font-size: 0.85rem; }
+      .remove-btn { 
+        top: 12px; 
+        right: 12px; 
+      }
       .add-btn { padding: 12px; font-size: 1rem; }
       button[type="submit"] { padding: 14px; font-size: 1.1rem; }
     }
 
-    /* كمبيوتر - عرض واسع ومريح */
+    /* كمبيوتر - عرض واسع */
     @media (min-width: 900px) {
       .container { padding: 32px 40px; max-width: 800px; }
       .logo-img { max-width: 360px; }
@@ -197,7 +240,6 @@
 </datalist>
 
 <script>
-// كائن الوزن التلقائي
 const productWeights = {
   "001 عجمي حمص بالطحينة 325غ": "325 غرام",
   "002 عجمي كريم الثوم 230غ": "230 غرام",
