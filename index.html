@@ -5,23 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
   <title>طلب منتجات العجمي</title>
 
-  <!-- الأيقونات بالأسماء الدقيقة اللي موجودة في الجذر -->
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+  <!-- الأيقونات نسبية (بدون /) -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
 
-  <!-- Open Graph للمشاركة -->
+  <!-- Open Graph -->
   <meta property="og:title" content="طلب منتجات العجمي">
   <meta property="og:description" content="اطلب منتجات العجمي الأصلية بسهولة وسرعة">
-  <meta property="og:image" content="/logo.png">
+  <meta property="og:image" content="logo.png">
   <meta property="og:url" content="https://alajamyfood.github.io">
   <meta property="og:type" content="website">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="طلب منتجات العجمي">
   <meta name="twitter:description" content="اطلب منتجات العجمي الأصلية بسهولة وسرعة">
-  <meta name="twitter:image" content="/logo.png">
+  <meta name="twitter:image" content="logo.png">
 
   <style>
     :root {
@@ -39,7 +39,7 @@
       width: 100%;
       margin: 0;
       padding: 0;
-      overflow-x: hidden; /* منع الـ scroll الأفقي */
+      overflow-x: hidden;
     }
     body {
       font-family: 'Tajawal', system-ui, sans-serif;
@@ -84,9 +84,7 @@
       color:white; border:none; border-radius:12px; font-size:1.15rem; font-weight:700; cursor:pointer;
       margin-top:16px; box-shadow:0 4px 16px rgba(17,157,164,0.3);
     }
-    button[type="submit"]:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 6px 20px rgba(17,157,164,0.4); }
 
-    /* تحسين قوي جدًا للموبايل (بطاقات + بدون تقطيع) */
     @media (max-width: 580px) {
       body { padding: 6px 4px; }
       .container { padding: 14px 10px; border-radius: 14px; }
@@ -96,7 +94,6 @@
       label { font-size: 0.93rem; margin-bottom: 4px; }
       input, select, textarea { padding: 11px; font-size: 0.98rem; }
       table { margin: 6px 0 10px; }
-      /* بطاقات عمودية كاملة */
       table, thead, tbody, th, td, tr { display: block; }
       thead tr { position: absolute; top: -9999px; left: -9999px; }
       tr { margin-bottom: 14px; border: 1px solid #ddd; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 8px; }
@@ -116,7 +113,7 @@
 
 <div class="container">
   <div class="header">
-    <img src="/logo.png" alt="العجمي" class="logo-img" loading="lazy">
+    <img src="logo.png" alt="العجمي" class="logo-img" loading="lazy">
     <div class="since">Since 1989 • Al Ajamy</div>
   </div>
 
