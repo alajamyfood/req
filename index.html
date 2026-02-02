@@ -335,10 +335,31 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
 
   const formData = new FormData(this);
 
-  fetch('https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec', {
-    method: 'POST',
-    body: formData
-  })
+let products = [];
+let quantities = [];
+let weights = [];
+
+for (let [key, value] of formData.entries()) {
+  if (key.startsWith("product_")) products.push(value);
+  if (key.startsWith("quantity_")) quantities.push(value);
+  if (key.startsWith("weight_")) weights.push(value);
+}
+
+const payload = {
+  governorate: formData.get("governorate"),
+  customerName: formData.get("customerName"),
+  notes: formData.get("notes"),
+  products: products,
+  quantities: quantities,
+  weights: weights
+};
+
+fetch('https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec', {
+  method: 'POST',
+  body: JSON.stringify(payload),
+  headers: { "Content-Type": "application/json" }
+})
+
   .then(r => r.json())
   .then(() => {
     alert('تم إرسال الطلب بنجاح ✅');
