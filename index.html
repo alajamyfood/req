@@ -256,8 +256,8 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
     body: new FormData(this)
   })
   .then(() => {
-    alert(`🎉  تم إرسال الطلب بنجاح!  🎉\n\nعدد الأصناف المرسلة: ${itemCount}\n\nشكراً لثقتكم\nسيتم التواصل معكم في أقرب وقت ممكن`);
-    
+    alert(`🎉  تم إرسال الطلب بنجاح!  🎉\n\nعدد الأصناف المرسلة: ${itemCount}\n\nشكراً لجهودك`);
+
     this.reset();
     document.getElementById('itemsBody').innerHTML = '';
     rowCounter = 0;
