@@ -243,6 +243,87 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
     submitBtn.textContent = "إرسال الطلب";
   });
 });
+<script>
+// ... (كل الكود السابق نفسه: productWeights, isDuplicate, addRow بدون تغيير)
+
+// دالة جديدة لعد الأصناف الصحيحة
+function getItemCount() {
+  const rows = document.querySelectorAll('#itemsBody tr');
+  let count = 0;
+  rows.forEach(row => {
+    const prodInput = row.querySelector('[name^="product_"]');
+    if (prodInput && prodInput.value.trim()) {
+      count++;
+    }
+  });
+  return count;
+}
+
+// دالة لإنشاء نص ملخص بسيط
+function getOrderSummary() {
+  const rows = document.querySelectorAll('#itemsBody tr');
+  let summary = "مراجعة الطلب قبل الإرسال:\n\n";
+  let index = 1;
+  
+  rows.forEach(row => {
+    const product = row.querySelector('[name^="product_"]')?.value.trim();
+    const quantity = row.querySelector('[name^="quantity_"]')?.value;
+    const weight = row.querySelector('[name^="weight_"]')?.value;
+    
+    if (product) {
+      summary += `${index}. ${product}\n   الكمية: ${quantity} ${weight ? `(${weight})` : ''}\n`;
+      index++;
+    }
+  });
+  
+  summary += `\nعدد الأصناف: ${index - 1}`;
+  return summary;
+}
+
+document.getElementById('orderForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const itemCount = getItemCount();
+  
+  if (itemCount === 0) {
+    alert("⚠️ يجب إضافة منتج واحد على الأقل!");
+    return;
+  }
+
+  // عرض ملخص للتأكيد
+  const summaryText = getOrderSummary();
+  const confirmed = confirm(summaryText + "\n\nهل كل شيء صحيح؟ اضغط موافق لإرسال الطلب");
+
+  if (!confirmed) {
+    return; // الزبون ألغى
+  }
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'جاري الإرسال...';
+
+  fetch("https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec", {
+    method: "POST",
+    body: new FormData(this)
+  })
+  .then(() => {
+    // رسالة نجاح أكبر وأوضح
+    alert(`🎉 تم إرسال الطلب بنجاح!\n\nعدد الأصناف المرسلة: ${itemCount}\n\nشكراً لثقتكم! سيتم التواصل معكم قريباً.`);
+    
+    this.reset();
+    document.getElementById('itemsBody').innerHTML = '';
+    rowCounter = 0;
+    addRow();
+  })
+  .catch(() => {
+    // رسالة خطأ أوضح
+    alert("❌ حدث خطأ أثناء إرسال الطلب\nيرجى التحقق من الإنترنت وحاول مرة أخرى\nأو تواصل معنا مباشرة عبر الواتساب");
+  })
+  .finally(() => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "إرسال الطلب";
+  });
+});
 </script>
 </body>
 </html>
