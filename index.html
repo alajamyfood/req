@@ -14,7 +14,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#006d77">
 <style>
 :root{--turquoise-dark:#006d77;--turquoise-medium:#119da4;--turquoise-light:#83c5be;--turquoise-pale:#e0f7f4;--text-dark:#0d1f1f;--blur-bg:rgba(255,255,255,0.94);--border:#a0d4cf;}
@@ -27,7 +27,7 @@ h2{text-align:center;color:var(--turquoise-dark);margin-bottom:24px;font-size:1.
 .form-group{margin-bottom:20px;}
 label{display:block;margin-bottom:8px;font-weight:600;font-size:1.05rem;}
 input,select,textarea{width:100%;padding:14px;border:1px solid var(--border);border-radius:10px;font-size:1.05rem;}
-table{width:100%;border-collapse:collapse;margin:12px 0 20px;}
+table{width:100%;margin:12px 0 20px;}
 th,td{padding:12px 10px;text-align:right;border-bottom:1px solid #eee;}
 th{background:rgba(17,157,164,0.08);}
 .remove-btn{background:#e74c3c;color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;}
@@ -36,13 +36,37 @@ button[type="submit"]{width:100%;padding:16px;margin-top:24px;font-size:1.2rem;f
 .note{text-align:center;font-size:.95rem;color:#444;margin-top:12px;}
 .note a{color:var(--turquoise-dark);font-weight:700;text-decoration:none;}
 .note a:hover{text-decoration:underline;}
-/* ===== موبايل فقط — ترتيب الحقول عمودي ===== */
+
+/* موبايل عادي */
 @media (max-width:580px){
-table, thead, tbody, th, td, tr{display:block;width:100%;}
-thead{display:none;}
-tr{margin-bottom:18px;border:1px solid #ddd;border-radius:14px;background:white;box-shadow:0 4px 14px rgba(0,0,0,0.08);padding:14px;}
-td{border:none;padding:6px 0;}
-.remove-btn{width:100%;margin-top:6px;}
+  table { border-collapse: separate; border-spacing: 0 18px; }
+  thead { display:none; }
+  tbody, tr, td { display:block; width:100%; }
+  tr {
+    margin-bottom:18px;
+    border:1px solid #ddd;
+    border-radius:14px;
+    background:white;
+    box-shadow:0 4px 14px rgba(0,0,0,0.08);
+    padding:14px;
+  }
+  td { border:none; padding:6px 0; }
+  .remove-btn { width:100%; margin-top:6px; }
+}
+
+/* خاص بـ standalone mode (التطبيق المثبت) */
+@media (display-mode: standalone) and (max-width: 580px) {
+  table, tbody, tr, td { display:block !important; width:100% !important; }
+  tr {
+    margin-bottom:18px !important;
+    padding:14px !important;
+    border:1px solid #ddd !important;
+    border-radius:14px !important;
+    background:white !important;
+    box-shadow:0 4px 14px rgba(0,0,0,0.08) !important;
+    min-height: 80px; /* يساعد في الظهور */
+  }
+  td { border:none !important; padding:8px 0 !important; }
 }
 </style>
 </head>
@@ -80,34 +104,7 @@ td{border:none;padding:6px 0;}
 
 <!-- الأصناف كاملة -->
 <datalist id="product-list">
-<option value="001 عجمي حمص بالطحينة 325غ">
-<option value="002 عجمي كريم الثوم 230غ">
-<option value="003 عجمي متبل 230غ">
-<option value="004 عجمي حمص 450غ">
-<option value="005 عجمي حمص 300غ">
-<option value="006 عجمي حمص 225غ">
-<option value="007 عجمي كريم الثوم 225غ">
-<option value="008 عجمي متبل 450غ">
-<option value="009 عجمي متبل 225غ">
-<option value="010 زاد العربي حمص بالطحينة 230غ">
-<option value="011 زاد العربي كريم الثوم 230غ">
-<option value="012 زاد العربي متبل 230غ">
-<option value="013 الحمصاني حمص 230غ">
-<option value="014 الحمصاني كريم الثوم 230غ">
-<option value="015 الخال حمص 230غ">
-<option value="016 الخال كريم الثوم 230غ">
-<option value="017 الخال متبل 230غ">
-<option value="018 عجمي حمص بالكيلو">
-<option value="019 الحمصاني حمص بالكيلو">
-<option value="020 زاد العربي كريم الثوم بالكيلو">
-<option value="021 الحمصاني كريم الثوم بالكيلو">
-<option value="022 الخال كريم الثوم بالكيلو">
-<option value="023 MNZ كريم الثوم بالكيلو">
-<option value="024 عجمي متبل بالكيلو">
-<option value="025 حمص خام أسبتيك 20 كغ">
-<option value="026 2750غ عجمي لبنة">
-<option value="027 900غ عجمي لبنة">
-<option value="028 أبو عبدو حمص 300غ">
+<option value="001 عجمي حمص بالطحينة 325غ"><option value="002 عجمي كريم الثوم 230غ"><option value="003 عجمي متبل 230غ"><option value="004 عجمي حمص 450غ"><option value="005 عجمي حمص 300غ"><option value="006 عجمي حمص 225غ"><option value="007 عجمي كريم الثوم 225غ"><option value="008 عجمي متبل 450غ"><option value="009 عجمي متبل 225غ"><option value="010 زاد العربي حمص بالطحينة 230غ"><option value="011 زاد العربي كريم الثوم 230غ"><option value="012 زاد العربي متبل 230غ"><option value="013 الحمصاني حمص 230غ"><option value="014 الحمصاني كريم الثوم 230غ"><option value="015 الخال حمص 230غ"><option value="016 الخال كريم الثوم 230غ"><option value="017 الخال متبل 230غ"><option value="018 عجمي حمص بالكيلو"><option value="019 الحمصاني حمص بالكيلو"><option value="020 زاد العربي كريم الثوم بالكيلو"><option value="021 الحمصاني كريم الثوم بالكيلو"><option value="022 الخال كريم الثوم بالكيلو"><option value="023 MNZ كريم الثوم بالكيلو"><option value="024 عجمي متبل بالكيلو"><option value="025 حمص خام أسبتيك 20 كغ"><option value="026 2750غ عجمي لبنة"><option value="027 900غ عجمي لبنة"><option value="028 أبو عبدو حمص 300غ">
 </datalist>
 
 <script>
@@ -259,7 +256,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
     body: new FormData(this)
   })
   .then(() => {
-    alert(`🎉  تم إرسال الطلب بنجاح!  🎉\n\nعدد الأصناف المرسلة: ${itemCount});
+    alert(`🎉  تم إرسال الطلب بنجاح!  🎉\n\nعدد الأصناف المرسلة: ${itemCount}\n\nشكراً لثقتكم\nسيتم التواصل معكم في أقرب وقت ممكن`);
     
     this.reset();
     document.getElementById('itemsBody').innerHTML = '';
