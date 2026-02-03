@@ -149,7 +149,7 @@ function addRow() {
   const id = rowCounter++;
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td><input list="product-list" name="product_${id}" placeholder="ابحث أو اكتب كود المنتج (مثال: 001 عجمي...)" required aria-label="اسم المنتج رقم ${id + 1}"></td>
+    <td><input list="product-list" name="product_${id}" placeholder="اختر أو اكتب اسم المنتج (مثال: 001 عجمي...)" required aria-label="اسم المنتج رقم ${id + 1}"></td>
     <td><input type="number" name="quantity_${id}" min="1" step="1" placeholder="شنطة/علبة/طرد" required aria-label="الكمية (شنطة/علبة) للمنتج رقم ${id + 1}"></td>
     <td>
       <select name="weight_${id}" aria-label="الوزن للمنتج رقم ${id + 1}">
