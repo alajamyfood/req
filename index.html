@@ -57,7 +57,7 @@ input, select, textarea {
   font-size:1.05rem;
 }
 input::placeholder, textarea::placeholder {
-  color: #666 !important;          /* لون الـ hint / placeholder أغمق */
+  color: #666 !important;
   opacity: 0.9;
 }
 table { width:100%; margin:12px 0 20px; }
@@ -371,11 +371,10 @@ function addRow() {
   const productInput = tr.querySelector(`[name="product_${id}"]`);
   const weightCell = tr.querySelector(`#weight-cell-${id}`);
 
-  productInput.addEventListener('input', function(e) {   // نستخدم input بدل change عشان يشتغل حتى لو كتب يدوي
+  productInput.addEventListener('input', function(e) {
     const val = this.value.trim();
 
     if (val === "") {
-      // إذا فرغ الحقل نرجع select افتراضي
       weightCell.innerHTML = `
         <select name="weight_${id}" class="weight-select">
           <option value="" disabled selected hidden>الوزن</option>
@@ -398,7 +397,6 @@ function addRow() {
       weightCell.innerHTML = `
         <select name="weight_${id}" class="weight-select">
           <option value="" disabled selected hidden>الوزن</option>
-          <!-- الخيارات نفسها -->
           <option value="325 غرام">325 غرام</option>
           <option value="230 غرام">230 غرام</option>
           <option value="450 غرام">450 غرام</option>
@@ -415,7 +413,6 @@ function addRow() {
     const expectedWeight = productWeights[val];
 
     if (expectedWeight) {
-      // منتج معروف → select + قيمة تلقائية
       weightCell.innerHTML = `
         <select name="weight_${id}" class="weight-select">
           <option value="${expectedWeight}" selected>${expectedWeight}</option>
@@ -430,7 +427,6 @@ function addRow() {
           <option value="20 كغ">20 كغ</option>
         </select>`;
     } else {
-      // منتج غير معروف → حقل نصي قابل للكتابة
       weightCell.innerHTML = `
         <input type="text" name="weight_${id}" placeholder="اكتب الوزن (مثال: 400 غرام)" required>
       `;
@@ -446,10 +442,12 @@ function getOrderSummaryForDisplay() {
     const prod = row.querySelector('[name^="product_"]')?.value.trim();
     const qty  = row.querySelector('[name^="quantity_"]')?.value;
     const wgt  = row.querySelector('[name^="weight_"]')?.value;
+
     if (prod) {
-      summary += `${i}. ${prod}\n الكمية: ${qty}`;
-      if (wgt) summary += ` - ${wgt}`;
-      summary += '\n\n';
+      summary += `${i}. ${prod}\n`;
+      summary += `الكمية: ${qty}\n`;
+      if (wgt) summary += `الوزن: ${wgt}\n`;
+      summary += '\n';
       i++;
     }
   });
@@ -472,10 +470,12 @@ function buildWhatsAppMessage() {
     const p = r.querySelector('[name^="product_"]')?.value.trim();
     const q = r.querySelector('[name^="quantity_"]')?.value;
     const w = r.querySelector('[name^="weight_"]')?.value;
+
     if (p) {
-      msg += `${idx}. ${p}\n الكمية: ${q}`;
-      if (w) msg += ` - ${w}`;
-      msg += '\n\n';
+      msg += `${idx}. ${p}\n`;
+      msg += `الكمية: ${q}\n`;
+      if (w) msg += `الوزن: ${w}\n`;
+      msg += '\n';
       idx++;
     }
   });
