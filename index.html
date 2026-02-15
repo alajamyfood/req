@@ -351,7 +351,6 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
 ──────────────────────────────
 ${summaryText}
 ──────────────────────────────
-هل البيانات صحيحة وكاملة؟`;
 
   document.getElementById('reviewText').textContent = reviewMessage;
   document.getElementById('reviewModal').style.display = 'flex';
@@ -402,7 +401,7 @@ document.getElementById('cancelReview').onclick = function() {
   document.getElementById('reviewModal').style.display = 'none';
 };
 
-// زر نسخ الطلب للواتساب
+// ارسل الطلب لكروب الواتساب
 document.getElementById('copyToWhatsApp').onclick = function() {
   const text = document.getElementById('reviewText').textContent;
   const phone = "905345758221";
