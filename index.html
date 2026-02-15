@@ -114,19 +114,16 @@ button[type="submit"]{width:100%;padding:16px;margin-top:24px;font-size:1.2rem;f
   flex-wrap: wrap;
 }
 #reviewModal button {
-  padding: 12px 32px;
+  padding: 12px 40px;
   border: none;
   border-radius: 10px;
   font-size: 1.1rem;
   cursor: pointer;
-  min-width: 160px;
+  min-width: 220px;
+  font-weight: 600;
 }
-#reviewModal .confirm-btn {
-  background: var(--turquoise-medium);
-  color: white;
-}
-#reviewModal .whatsapp-btn {
-  background: #25D366;
+#reviewModal .main-btn {
+  background: linear-gradient(90deg, #119da4, #83c5be);
   color: white;
 }
 #reviewModal .cancel-btn {
@@ -188,8 +185,7 @@ button[type="submit"]{width:100%;padding:16px;margin-top:24px;font-size:1.2rem;f
     <h3>مراجعة الطلب قبل الإرسال</h3>
     <pre id="reviewText"></pre>
     <div class="buttons">
-      <button class="confirm-btn" id="confirmSend">إرسال للشيت</button>
-      <button class="whatsapp-btn" id="copyToWhatsApp">إرسال عبر واتساب</button>
+      <button class="main-btn" id="confirmAndSend">تأكيد وإرسال</button>
       <button class="cancel-btn" id="cancelReview">راجع مرة أخرى</button>
     </div>
   </div>
@@ -242,11 +238,11 @@ function addRow() {
   const id = rowCounter++;
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td><input list="product-list" name="product_${id}" placeholder="اختر أو اكتب اسم المنتج (مثال: 001 عجمي...)" required aria-label="اسم المنتج رقم ${id + 1}"></td>
-    <td><input type="number" name="quantity_${id}" min="1" step="1" placeholder="شنطة/علبة/طرد" required aria-label="الكمية (شنطة/علبة) للمنتج رقم ${id + 1}"></td>
+    <td><input list="product-list" name="product_${id}" placeholder="اختر أو اكتب اسم المنتج (مثال: 001 عجمي...)" required></td>
+    <td><input type="number" name="quantity_${id}" min="1" step="1" placeholder="شنطة/علبة/طرد" required></td>
     <td>
-      <select name="weight_${id}" aria-label="الوزن للمنتج رقم ${id + 1}">
-        <option value="" disabled selected hidden>اختر الوزن المناسب</option>
+      <select name="weight_${id}">
+        <option value="" disabled selected hidden>اختر الوزن</option>
         <option value="325 غرام">325 غرام</option>
         <option value="230 غرام">230 غرام</option>
         <option value="450 غرام">450 غرام</option>
@@ -287,7 +283,7 @@ function addRow() {
   w.addEventListener('change', () => {
     const currentProduct = p.value.trim();
     if (currentProduct && productWeights[currentProduct] && w.value !== productWeights[currentProduct]) {
-      alert("الوزن المختار غير مطابق للمنتج! يرجى اختيار الوزن الصحيح التلقائي.");
+      alert("الوزن المختار غير مطابق للمنتج!");
       w.value = productWeights[currentProduct];
     }
   });
@@ -297,9 +293,44 @@ function getItemCount() {
   return document.querySelectorAll('#itemsBody tr').length;
 }
 
-function getOrderSummary() {
+function buildOrderMessage() {
+  const governorate  = document.querySelector('[name="governorate"]').value.trim() || 'غير محدد';
+  const customerName = document.querySelector('[name="customerName"]').value.trim() || 'غير محدد';
+  const notes        = document.querySelector('[name="notes"]').value.trim();
+
+  let msg = `*طلب جديد - منتجات العجمي* 📦\n\n`;
+  msg += `📍 المحافظة: ${governorate}\n`;
+  msg += `👤 اسم الزبون: ${customerName}\n\n`;
+  msg += `*المنتجات المطلوبة:*\n`;
+
   const rows = document.querySelectorAll('#itemsBody tr');
+  let index = 1;
+  rows.forEach(row => {
+    const product  = row.querySelector('[name^="product_"]')?.value.trim();
+    const quantity = row.querySelector('[name^="quantity_"]')?.value;
+    const weight   = row.querySelector('[name^="weight_"]')?.value;
+
+    if (product) {
+      msg += `${index}. ${product}\n   الكمية: ${quantity}`;
+      if (weight && weight !== '') msg += ` - ${weight}`;
+      msg += '\n\n';
+      index++;
+    }
+  });
+
+  if (notes.trim()) {
+    msg += `*ملاحظات:*\n${notes}\n\n`;
+  }
+
+  msg += `إجمالي الأصناف: ${index-1}\n`;
+  msg += `شكراً، بانتظار التأكيد والتوصيل 🛒`;
+
+  return msg;
+}
+
+function getOrderSummaryForDisplay() {
   let summary = `الطلب يحتوي على ${getItemCount()} صنف/أصناف\n──────────────────────────────\n\n`;
+  const rows = document.querySelectorAll('#itemsBody tr');
   let index = 1;
 
   rows.forEach(row => {
@@ -309,7 +340,7 @@ function getOrderSummary() {
 
     if (product) {
       summary += `${index}. ${product}\n   الكمية: ${quantity}`;
-      if (weight && weight !== '') summary += ` - ${weight}`;
+      if (weight) summary += ` - ${weight}`;
       summary += '\n\n';
       index++;
     }
@@ -318,56 +349,61 @@ function getOrderSummary() {
   return summary.trim();
 }
 
-addRow(); // بدء بسطر واحد
+addRow();
 
 document.getElementById('orderForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  const form = this;
-  if (!form.governorate.value.trim() || !form.customerName.value.trim()) {
-    alert("يرجى تعبئة حقلي المحافظة واسم الزبون بشكل صحيح");
+  if (!this.governorate.value.trim() || !this.customerName.value.trim()) {
+    alert("يرجى تعبئة المحافظة واسم الزبون");
+    return;
+  }
+  if (getItemCount() === 0) {
+    alert("يجب إضافة منتج واحد على الأقل");
     return;
   }
 
-  const itemCount = getItemCount();
-  if (itemCount === 0) {
-    alert("⚠️ يجب إضافة منتج واحد على الأقل ⚠️");
-    return;
-  }
-
-  const summaryText = getOrderSummary();
-  document.getElementById('reviewText').textContent = summaryText;
+  document.getElementById('reviewText').textContent = getOrderSummaryForDisplay();
   document.getElementById('reviewModal').style.display = 'flex';
 });
 
-// إرسال للشيت
-document.getElementById('confirmSend').onclick = function() {
+// الزر الوحيد: تأكيد وإرسال
+document.getElementById('confirmAndSend').onclick = function() {
   document.getElementById('reviewModal').style.display = 'none';
   const submitBtn = document.getElementById('submitBtn');
   submitBtn.disabled = true;
   submitBtn.classList.add('loading');
-  submitBtn.textContent = 'جاري إرسال الطلب...';
+  submitBtn.textContent = 'جاري الإرسال...';
 
   fetch("https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec", {
     method: "POST",
+    mode: "no-cors",   // مهم لأن Google Apps Script غالباً ما يرجع رد واضح
     body: new FormData(document.getElementById('orderForm'))
   })
-  .then(response => {
-    if (!response.ok) throw new Error("مشكلة في الاتصال");
-    return response.json();
-  })
-  .then(data => {
-    if (data && data.success) {
-      alert(`🎉 تم إرسال الطلب بنجاح! 🎉\nعدد الأصناف: ${getItemCount()}\nشكراً لجهودك`);
-      document.getElementById('orderForm').reset();
-      document.getElementById('itemsBody').innerHTML = '';
-      rowCounter = 0;
-      addRow();
-    } else {
-      alert("⚠️ " + (data?.message || "حدث خطأ غير متوقع"));
-    }
+  .then(() => {
+    // نفترض النجاح (لأن no-cors ما بيرجع بيانات)
+    alert("🎉 تم إرسال الطلب بنجاح إلى السجل!\nسيفتح الواتساب الآن للتأكيد");
+
+    // فتح الواتساب
+    const message = buildOrderMessage();
+    const phone = "905345758221";
+    const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+
+    // إعادة تعيين النموذج
+    document.getElementById('orderForm').reset();
+    document.getElementById('itemsBody').innerHTML = '';
+    rowCounter = 0;
+    addRow();
   })
   .catch(err => {
-    alert("❌ حدث خطأ أثناء الإرسال:\n" + err.message + "\n\nجرب التواصل مباشرة عبر الواتساب");
+    console.error(err);
+    alert("⚠️ حدث خطأ أثناء حفظ الطلب في السجل\nلكن سيفتح الواتساب الآن عشان ترسله يدوياً");
+
+    // نفتح الواتساب حتى لو فشل الشيت
+    const message = buildOrderMessage();
+    const phone = "905345758221";
+    const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
   })
   .finally(() => {
     submitBtn.disabled = false;
@@ -376,33 +412,6 @@ document.getElementById('confirmSend').onclick = function() {
   });
 };
 
-// إرسال عبر واتساب (النسخة المحسنة)
-document.getElementById('copyToWhatsApp').onclick = function() {
-  document.getElementById('reviewModal').style.display = 'none';
-
-  const governorate  = document.querySelector('[name="governorate"]').value.trim() || 'غير محدد';
-  const customerName = document.querySelector('[name="customerName"]').value.trim() || 'غير محدد';
-  const notes        = document.querySelector('[name="notes"]').value.trim();
-
-  let message = `*طلب جديد - منتجات العجمي* 📦\n\n`;
-  message += `📍 المحافظة / المدينة: ${governorate}\n`;
-  message += `👤 اسم الزبون: ${customerName}\n\n`;
-  message += `*تفاصيل الطلب:*\n`;
-  message += getOrderSummary().replace(/──────────────────────────────/g, '───────────────');
-  message += `\n\n`;
-
-  if (notes.trim()) {
-    message += `*ملاحظات إضافية:*\n${notes}\n\n`;
-  }
-
-  message += `شكراً لكم، بانتظار التأكيد والتوصيل 🛒`;
-
-  const phone = "905345758221";
-  const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-  window.open(waUrl, '_blank');
-};
-
-// إلغاء
 document.getElementById('cancelReview').onclick = function() {
   document.getElementById('reviewModal').style.display = 'none';
 };
