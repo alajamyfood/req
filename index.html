@@ -193,7 +193,7 @@ function addRow() {
 
 function getOrderSummaryForDisplay() {
   const rows = document.querySelectorAll('#itemsBody tr');
-  let summary = `عدد الأصناف: ${rows.length}\n──────────────────────────────\n\n`;
+  let summary = `عدد الأصناف: ${rows.length}\n───────────────\n\n`;
   let i = 1;
   rows.forEach(row => {
     const prod = row.querySelector('[name^="product_"]')?.value.trim();
