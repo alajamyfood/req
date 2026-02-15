@@ -31,104 +31,11 @@ table{width:100%;margin:12px 0 20px;}
 th,td{padding:12px 10px;text-align:right;border-bottom:1px solid #eee;}
 th{background:rgba(17,157,164,0.08);}
 .remove-btn{background:#e74c3c;color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;}
-.add-btn{
-  background:var(--turquoise-medium);
-  color:#fff;
-  border:none;
-  padding:18px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  width:100%;
-  margin-top:12px;
-  font-size:1.25rem;
-  font-weight:600;
-}
+.add-btn{background:var(--turquoise-medium);color:#fff;border:none;padding:14px;border-radius:10px;cursor:pointer;width:100%;margin-top:12px;}
 button[type="submit"]{width:100%;padding:16px;margin-top:24px;font-size:1.2rem;font-weight:700;background:linear-gradient(90deg,var(--turquoise-medium),var(--turquoise-light));color:#fff;border:none;border-radius:12px;cursor:pointer;}
-.loading {
-  pointer-events: none;
-  opacity: 0.85;
-}
-.loading::after {
-  content: '';
-  display: inline-block;
-  width: 1.1em;
-  height: 1.1em;
-  margin-left: 0.6em;
-  vertical-align: middle;
-  border: 3px solid white;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 .note{text-align:center;font-size:.95rem;color:#444;margin-top:12px;}
 .note a{color:var(--turquoise-dark);font-weight:700;text-decoration:none;}
 .note a:hover{text-decoration:underline;}
-
-/* Modal للمراجعة */
-#reviewModal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Tajawal', sans-serif;
-}
-#reviewModal .modal-content {
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  max-width: 90%;
-  max-height: 85vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-  direction: rtl;
-  text-align: right;
-}
-#reviewModal h3 {
-  color: var(--turquoise-dark);
-  margin-bottom: 16px;
-  font-size: 1.4rem;
-  text-align: center;
-}
-#reviewModal pre {
-  background: #f8f9fa;
-  padding: 16px;
-  border-radius: 10px;
-  font-family: 'Tajawal', monospace;
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-size: 1.05rem;
-  line-height: 1.6;
-  margin: 16px 0;
-  border: 1px solid #e0e0e0;
-}
-#reviewModal .buttons {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  margin-top: 24px;
-}
-#reviewModal button {
-  padding: 12px 32px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  min-width: 140px;
-}
-#reviewModal .confirm-btn {
-  background: var(--turquoise-medium);
-  color: white;
-}
-#reviewModal .cancel-btn {
-  background: #e0e0e0;
-  color: #333;
-}
 
 /* موبايل عادي */
 @media (max-width:580px){
@@ -147,7 +54,7 @@ button[type="submit"]{width:100%;padding:16px;margin-top:24px;font-size:1.2rem;f
   .remove-btn { width:100%; margin-top:6px; }
 }
 
-/* standalone mode */
+/* خاص بـ standalone mode (التطبيق المثبت) */
 @media (display-mode: standalone) and (max-width: 580px) {
   table, tbody, tr, td { display:block !important; width:100% !important; }
   tr {
@@ -157,7 +64,7 @@ button[type="submit"]{width:100%;padding:16px;margin-top:24px;font-size:1.2rem;f
     border-radius:14px !important;
     background:white !important;
     box-shadow:0 4px 14px rgba(0,0,0,0.08) !important;
-    min-height: 80px;
+    min-height: 80px; /* يساعد في الظهور */
   }
   td { border:none !important; padding:8px 0 !important; }
 }
@@ -193,19 +100,6 @@ button[type="submit"]{width:100%;padding:16px;margin-top:24px;font-size:1.2rem;f
 <button type="submit" id="submitBtn">إرسال الطلب</button>
 <div class="note">في حال وجود استفسار، التواصل عبر واتس: <a href="https://wa.me/905345758221" target="_blank" rel="noopener">00905345758221</a> 💬</div>
 </form>
-
-<!-- Modal المراجعة -->
-<div id="reviewModal">
-  <div class="modal-content">
-    <h3>مراجعة الطلب قبل الإرسال</h3>
-    <pre id="reviewText"></pre>
-    <div class="buttons">
-      <button class="confirm-btn" id="confirmSend">نعم، أرسل الطلب</button>
-      <button class="cancel-btn" id="cancelReview">راجع مرة أخرى</button>
-    </div>
-  </div>
-</div>
-
 </div>
 
 <!-- الأصناف كاملة -->
@@ -318,7 +212,7 @@ function getItemCount() {
 
 function getOrderSummary() {
   const rows = document.querySelectorAll('#itemsBody tr');
-  let summary = "";
+  let summary = "مراجعة الطلب قبل الإرسال:\n\n";
   let index = 1;
   
   rows.forEach(row => {
@@ -338,7 +232,6 @@ function getOrderSummary() {
 
 addRow(); // بدء بسطر واحد
 
-// ربط الحدث مع modal
 document.getElementById('orderForm').addEventListener('submit', function(e) {
   e.preventDefault();
 
@@ -350,58 +243,33 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
   }
 
   const summaryText = getOrderSummary();
-  const reviewMessage = 
-`الطلب يحتوي على ${itemCount} صنف/أصناف
+  const confirmed = confirm(summaryText + "\n\n──────────────────────\nهل الطلب صحيح وكامل؟\nاضغط \"موافق\" للإرسال");
 
-──────────────────────────────
-${summaryText}
-──────────────────────────────
+  if (!confirmed) return;
 
-هل البيانات صحيحة وكاملة؟`;
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'جاري الإرسال...';
 
-  document.getElementById('reviewText').textContent = reviewMessage;
-  document.getElementById('reviewModal').style.display = 'flex';
+  fetch("https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec", {
+    method: "POST",
+    body: new FormData(this)
+  })
+  .then(() => {
+    alert(`🎉  تم إرسال الطلب بنجاح!  🎉\n\nعدد الأصناف المرسلة: ${itemCount}\n\nشكراً لجهودك`);
 
-  // زر التأكيد
-  document.getElementById('confirmSend').onclick = function() {
-    document.getElementById('reviewModal').style.display = 'none';
-
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.classList.add('loading');
-    submitBtn.textContent = 'جاري إرسال الطلب...';
-
-    fetch("https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec", {
-      method: "POST",
-      mode: "no-cors",
-      body: new FormData(document.getElementById('orderForm'))
-    })
-    .then(() => {
-      alert(`🎉 تم إرسال الطلب بنجاح! 🎉
-
-عدد الأصناف المرسلة: ${itemCount}
-
-شكراً لجهودك`);
-      
-      document.getElementById('orderForm').reset();
-      document.getElementById('itemsBody').innerHTML = '';
-      rowCounter = 0;
-      addRow();
-    })
-    .catch(() => {
-      alert("❌ حدث خطأ أثناء إرسال الطلب ❌\n\nيرجى التحقق من الإنترنت\nأو تواصل معنا مباشرة عبر الواتساب: 00905345758221");
-    })
-    .finally(() => {
-      submitBtn.disabled = false;
-      submitBtn.classList.remove('loading');
-      submitBtn.textContent = "إرسال الطلب";
-    });
-  };
-
-  // زر الإلغاء / الرجوع
-  document.getElementById('cancelReview').onclick = function() {
-    document.getElementById('reviewModal').style.display = 'none';
-  };
+    this.reset();
+    document.getElementById('itemsBody').innerHTML = '';
+    rowCounter = 0;
+    addRow();
+  })
+  .catch(() => {
+    alert("❌  حدث خطأ أثناء إرسال الطلب  ❌\n\nيرجى التحقق من اتصال الإنترنت\nأو تواصل معنا مباشرة عبر الواتساب:\n00905345758221");
+  })
+  .finally(() => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "إرسال الطلب";
+  });
 });
 </script>
 </body>
