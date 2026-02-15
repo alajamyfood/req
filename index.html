@@ -205,24 +205,20 @@ button[type="submit"] {
 </style>
 </head>
 <body>
-
 <div class="container">
   <div class="header">
     <img src="logo.png" class="logo-img" alt="العجمي" loading="lazy">
   </div>
   <h2>نموذج طلب منتجات</h2>
-
   <form id="orderForm">
     <div class="form-group">
       <label>المحافظة / المدينة *</label>
       <input type="text" name="governorate" placeholder="مثال: إسطنبول - قونيا - أنطاليا - غازي عنتاب إلخ" required>
     </div>
-
     <div class="form-group">
       <label>اسم الزبون *</label>
       <input type="text" name="customerName" placeholder="مثال: محمد أحمد" required>
     </div>
-
     <div class="form-group">
       <label>تفاصيل المنتجات المطلوبة</label>
       <table>
@@ -238,20 +234,16 @@ button[type="submit"] {
       </table>
       <button type="button" class="add-btn" onclick="addRow()">+ إضافة صنف</button>
     </div>
-
     <div class="form-group">
       <label>ملاحظات</label>
       <textarea name="notes" placeholder="أي تفاصيل إضافية (مثال: نوع التغليف أو وقت التسليم المفضل)"></textarea>
     </div>
-
     <button type="submit" id="submitBtn">إرسال الطلب</button>
-
     <div class="note">
-      في حال وجود استفسار، التواصل عبر واتس: 
+      في حال وجود استفسار، التواصل عبر واتس:
       <a href="https://wa.me/905345758221" target="_blank" rel="noopener">00905345758221</a> 💬
     </div>
   </form>
-
   <!-- Modal المراجعة -->
   <div id="reviewModal">
     <div class="modal-content">
@@ -267,7 +259,6 @@ button[type="submit"] {
     </div>
   </div>
 </div>
-
 <datalist id="product-list">
   <option value="001 عجمي حمص بالطحينة 325غ">
   <option value="002 عجمي كريم الثوم 230غ">
@@ -298,7 +289,6 @@ button[type="submit"] {
   <option value="027 900غ عجمي لبنة">
   <option value="028 أبو عبدو حمص 300غ">
 </datalist>
-
 <script>
 const productWeights = {
   "001 عجمي حمص بالطحينة 325غ": "325 غرام",
@@ -330,13 +320,10 @@ const productWeights = {
   "027 900غ عجمي لبنة": "900 غرام",
   "028 أبو عبدو حمص 300غ": "علبة 300 غرام"
 };
-
 let rowCounter = 0;
-
 function isDuplicate(v, c) {
   return [...document.querySelectorAll('[name^="product_"]')].filter(i => i !== c && i.value.trim() !== "").some(i => i.value.trim() === v);
 }
-
 function addRow() {
   const id = rowCounter++;
   const tr = document.createElement('tr');
@@ -365,15 +352,11 @@ function addRow() {
       <button type="button" class="remove-btn" onclick="this.closest('tr').remove()">حذف</button>
     </td>
   `;
-
   document.getElementById('itemsBody').appendChild(tr);
-
   const productInput = tr.querySelector(`[name="product_${id}"]`);
   const weightCell = tr.querySelector(`#weight-cell-${id}`);
-
   productInput.addEventListener('input', function(e) {
     const val = this.value.trim();
-
     if (val === "") {
       weightCell.innerHTML = `
         <select name="weight_${id}" class="weight-select">
@@ -390,7 +373,6 @@ function addRow() {
         </select>`;
       return;
     }
-
     if (isDuplicate(val, this)) {
       alert("هذا الصنف مضاف مسبقاً!");
       this.value = "";
@@ -409,9 +391,7 @@ function addRow() {
         </select>`;
       return;
     }
-
     const expectedWeight = productWeights[val];
-
     if (expectedWeight) {
       weightCell.innerHTML = `
         <select name="weight_${id}" class="weight-select">
@@ -433,16 +413,14 @@ function addRow() {
     }
   });
 }
-
 function getOrderSummaryForDisplay() {
   const rows = document.querySelectorAll('#itemsBody tr');
   let summary = `عدد الأصناف: ${rows.length}\n───────────────\n\n`;
   let i = 1;
   rows.forEach(row => {
     const prod = row.querySelector('[name^="product_"]')?.value.trim();
-    const qty  = row.querySelector('[name^="quantity_"]')?.value;
-    const wgt  = row.querySelector('[name^="weight_"]')?.value;
-
+    const qty = row.querySelector('[name^="quantity_"]')?.value;
+    const wgt = row.querySelector('[name^="weight_"]')?.value;
     if (prod) {
       summary += `${i}. ${prod}\n`;
       summary += `الكمية: ${qty}\n`;
@@ -453,7 +431,6 @@ function getOrderSummaryForDisplay() {
   });
   return summary.trim();
 }
-
 function buildWhatsAppMessage() {
   const today = new Date();
   
@@ -461,17 +438,11 @@ function buildWhatsAppMessage() {
   const weekdays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   const weekday = weekdays[today.getDay()];
   
-  // أسماء الشهور بالعربي
-  const months = [
-    'يناير', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران',
-    'تموز', 'آب', 'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول'
-  ];
-  
-  // التاريخ + الساعة
+  // التاريخ + الساعة بتنسيق مرغوب
   const day = today.getDate();
   const monthNum = String(today.getMonth() + 1).padStart(2, '0');
   const year = today.getFullYear();
-  const hours = today.getHours() % 12 || 12;
+  const hours = today.getHours() % 12 || 12; // 12-hour format
   const minutes = String(today.getMinutes()).padStart(2, '0');
   const period = today.getHours() >= 12 ? 'م' : 'ص';
   
@@ -495,8 +466,8 @@ function buildWhatsAppMessage() {
     const w = r.querySelector('[name^="weight_"]')?.value;
     if (p) {
       msg += `${idx}. ${p}\n`;
-      if (w) msg += `وزن المنتج: ${w}\n`;     // وزن أولاً
-      msg += `الكمية: ${q}\n`;                 // الكمية تحت
+      if (w) msg += `وزن المنتج: ${w}\n`;
+      msg += `الكمية: ${q}\n`;
       msg += '\n';
       idx++;
     }
@@ -506,45 +477,31 @@ function buildWhatsAppMessage() {
   msg += `إجمالي الأصناف: ${idx-1}\nشكراً لكم – بانتظار التأكيد والتوصيل 🛒`;
 
   return msg;
-});
-
-  if (notes) msg += `*ملاحظات:*\n${notes}\n\n`;
-  msg += `إجمالي الأصناف: ${idx-1}\nشكراً لكم – بانتظار التأكيد والتوصيل 🛒`;
-  return msg;
 }
-
 // إضافة صف أول تلقائي
 addRow();
-
 document.getElementById('orderForm').addEventListener('submit', e => {
   e.preventDefault();
-
   if (!e.target.governorate.value.trim() || !e.target.customerName.value.trim()) {
     alert("يرجى تعبئة المحافظة واسم الزبون");
     return;
   }
-
   if (document.querySelectorAll('#itemsBody tr').length === 0) {
     alert("يجب إضافة منتج واحد على الأقل");
     return;
   }
-
   document.getElementById('reviewText').textContent = getOrderSummaryForDisplay();
   document.getElementById('reviewModal').style.display = 'flex';
 });
-
 document.getElementById('confirmAndSend').onclick = function() {
   document.getElementById('reviewModal').style.display = 'none';
-
   const msg = buildWhatsAppMessage();
   const phone = "905522221237";
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.classList.add('loading');
   btn.textContent = 'جاري الإرسال...';
-
   fetch("https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec", {
     method: "POST",
     mode: "no-cors",
@@ -561,7 +518,6 @@ document.getElementById('confirmAndSend').onclick = function() {
     addRow();
   });
 };
-
 document.getElementById('cancelReview').onclick = function() {
   document.getElementById('reviewModal').style.display = 'none';
 };
