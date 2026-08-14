@@ -124,6 +124,49 @@ button[type="submit"] {
   text-decoration:none;
 }
 .note a:hover { text-decoration:underline; }
+
+/* صندوق وزن الطلبية */
+.weight-box {
+  background: linear-gradient(135deg, #e0f7f4, #ffffff);
+  border: 2px solid var(--turquoise-medium);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 18px 0 10px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.weight-box.over-limit {
+  border-color: #e67e22;
+  background: linear-gradient(135deg, #fff3e0, #ffffff);
+  box-shadow: 0 0 0 3px rgba(230,126,34,0.15);
+}
+.weight-title {
+  font-weight: 700;
+  color: var(--turquoise-dark);
+  margin-bottom: 6px;
+  font-size: 1.05rem;
+}
+.weight-value {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--turquoise-dark);
+  margin: 4px 0;
+}
+.weight-box.over-limit .weight-value {
+  color: #e67e22;
+}
+.weight-status {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+.weight-limit {
+  font-size: 0.88rem;
+  color: #666;
+  margin-top: 8px;
+}
+
 #reviewModal {
   display:none;
   position:fixed;
@@ -233,6 +276,14 @@ button[type="submit"] {
         <tbody id="itemsBody"></tbody>
       </table>
       <button type="button" class="add-btn" onclick="addRow()">+ إضافة صنف</button>
+
+      <!-- صندوق وزن الطلبية -->
+      <div id="totalWeightBox" class="weight-box">
+        <div class="weight-title">وزن الطلبية الإجمالي</div>
+        <div id="totalWeightValue" class="weight-value">0.00 كغ</div>
+        <div id="weightStatus" class="weight-status">أضف منتجات لحساب الوزن وعدد الطبالي</div>
+        <div class="weight-limit">الحد الأقصى للطبلية الواحدة: 600 كغ</div>
+      </div>
     </div>
     <div class="form-group">
       <label>ملاحظات</label>
@@ -244,6 +295,7 @@ button[type="submit"] {
       <a href="https://wa.me/905345758221" target="_blank" rel="noopener">00905345758221</a> 💬
     </div>
   </form>
+
   <!-- Modal المراجعة -->
   <div id="reviewModal">
     <div class="modal-content">
@@ -259,6 +311,7 @@ button[type="submit"] {
     </div>
   </div>
 </div>
+
 <datalist id="product-list">
   <option value="001 عجمي حمص بالطحينة 230غ">
   <option value="002 عجمي كريم الثوم 230غ">
@@ -289,6 +342,7 @@ button[type="submit"] {
   <option value="027 900غ عجمي لبنة">
   <option value="028 أبو عبدو حمص 300غ">
 </datalist>
+
 <script>
 const productWeights = {
   "001 عجمي حمص بالطحينة 230غ": "230 غرام",
@@ -320,10 +374,113 @@ const productWeights = {
   "027 900غ عجمي لبنة": "900 غرام",
   "028 أبو عبدو حمص 300غ": "علبة 300 غرام"
 };
+
+const PALLET_MAX_KG = 600;
 let rowCounter = 0;
+
 function isDuplicate(v, c) {
-  return [...document.querySelectorAll('[name^="product_"]')].filter(i => i !== c && i.value.trim() !== "").some(i => i.value.trim() === v);
+  return [...document.querySelectorAll('[name^="product_"]')]
+    .filter(i => i !== c && i.value.trim() !== "")
+    .some(i => i.value.trim() === v);
 }
+
+/** تحويل نص الوزن إلى كيلوغرام */
+/** تحويل نص الوزن إلى كيلوغرام */
+function parseWeightToKg(weightStr) {
+  if (!weightStr) return 0;
+  const s = weightStr.trim().toLowerCase().replace(/,/g, '.');
+
+  // استخراج أول رقم موجود في النص (حتى لو بدأ بـ "علبة")
+  const match = s.match(/[\d.]+/);
+  const num = match ? parseFloat(match[0]) : NaN;
+
+  // كيلو / كغ
+  if (s.includes('كغ') || s.includes('كيلو')) {
+    return isNaN(num) ? 1 : num;   // "كيلو غرام" بدون رقم = 1 كغ
+  }
+
+  // غرام
+  if (s.includes('غرام') || s.includes('غ')) {
+    return isNaN(num) ? 0 : num / 1000;
+  }
+
+  // رقم فقط → نفترض كيلوغرام
+  return isNaN(num) ? 0 : num;
+}
+
+/** صياغة نص عدد الطبالي بالعربية */
+function getPalletText(count) {
+  if (count <= 0) return '';
+  if (count === 1) return 'طبلية واحدة';
+  if (count === 2) return 'طبليتين';
+  return count + ' طبالي';
+}
+
+/** حساب الوزن الكلي + عدد الطبالي وعرضها */
+function updateTotalWeight() {
+  let totalKg = 0;
+
+  document.querySelectorAll('#itemsBody tr').forEach(row => {
+    const qty = parseFloat(row.querySelector('[name^="quantity_"]')?.value) || 0;
+    const wgt = row.querySelector('[name^="weight_"]')?.value || '';
+    totalKg += qty * parseWeightToKg(wgt);
+  });
+
+  const box = document.getElementById('totalWeightBox');
+  const valueEl = document.getElementById('totalWeightValue');
+  const statusEl = document.getElementById('weightStatus');
+
+  valueEl.textContent = totalKg.toFixed(2) + ' كغ';
+
+  if (totalKg <= 0) {
+    box.classList.remove('over-limit');
+    statusEl.textContent = 'أضف منتجات لحساب الوزن وعدد الطبالي';
+    statusEl.style.color = '#666';
+    return;
+  }
+
+  const pallets = Math.ceil(totalKg / PALLET_MAX_KG);
+  const palletText = getPalletText(pallets);
+
+  if (pallets === 1) {
+    box.classList.remove('over-limit');
+    statusEl.innerHTML = `الطلبية سوف تتم على <strong>${palletText}</strong>`;
+    statusEl.style.color = '#2e7d32';
+  } else {
+    box.classList.add('over-limit');
+    statusEl.innerHTML = `الطلبية سوف تتوزع على <strong>${palletText}</strong>`;
+    statusEl.style.color = '#e65100';
+  }
+}
+
+function getDefaultWeightSelect(id, selectedValue = '') {
+  const options = [
+    '230 غرام',
+    '450 غرام',
+    '300 غرام',
+    '225 غرام',
+    'كيلو غرام',
+    '2750 غرام',
+    '900 غرام',
+    '20 كغ'
+  ];
+
+  let html = `<select name="weight_${id}" class="weight-select">`;
+  if (!selectedValue) {
+    html += `<option value="" disabled selected hidden>الوزن</option>`;
+  }
+  options.forEach(opt => {
+    const sel = (opt === selectedValue) ? ' selected' : '';
+    html += `<option value="${opt}"${sel}>${opt}</option>`;
+  });
+  // إذا كان الوزن المختار غير موجود في القائمة نضيفه
+  if (selectedValue && !options.includes(selectedValue)) {
+    html += `<option value="${selectedValue}" selected>${selectedValue}</option>`;
+  }
+  html += `</select>`;
+  return html;
+}
+
 function addRow() {
   const id = rowCounter++;
   const tr = document.createElement('tr');
@@ -335,88 +492,60 @@ function addRow() {
       <input type="number" name="quantity_${id}" min="1" step="1" placeholder="الكمية" required>
     </td>
     <td class="weight-cell" id="weight-cell-${id}">
-      <select name="weight_${id}" class="weight-select">
-        <option value="" disabled selected hidden>الوزن</option>
-        <option value="230 غرام">230 غرام</option>
-        <option value="230 غرام">230 غرام</option>
-        <option value="450 غرام">450 غرام</option>
-        <option value="300 غرام">300 غرام</option>
-        <option value="225 غرام">225 غرام</option>
-        <option value="كيلو غرام">كيلو غرام</option>
-        <option value="2750 غرام">2750 غرام</option>
-        <option value="900 غرام">900 غرام</option>
-        <option value="20 كغ">20 كغ</option>
-      </select>
+      ${getDefaultWeightSelect(id)}
     </td>
     <td>
-      <button type="button" class="remove-btn" onclick="this.closest('tr').remove()">حذف</button>
+      <button type="button" class="remove-btn" onclick="this.closest('tr').remove(); updateTotalWeight();">حذف</button>
     </td>
   `;
   document.getElementById('itemsBody').appendChild(tr);
+
   const productInput = tr.querySelector(`[name="product_${id}"]`);
+  const qtyInput = tr.querySelector(`[name="quantity_${id}"]`);
   const weightCell = tr.querySelector(`#weight-cell-${id}`);
-  productInput.addEventListener('input', function(e) {
+
+  // تحديث الوزن عند تغيير الكمية
+  qtyInput.addEventListener('input', updateTotalWeight);
+
+  // تحديث الوزن عند تغيير الـ select أو الـ input داخل خلية الوزن
+  weightCell.addEventListener('change', updateTotalWeight);
+  weightCell.addEventListener('input', updateTotalWeight);
+
+  productInput.addEventListener('input', function() {
     const val = this.value.trim();
-    if (val === "") {
-      weightCell.innerHTML = `
-        <select name="weight_${id}" class="weight-select">
-          <option value="" disabled selected hidden>الوزن</option>
-          <option value="230 غرام">230 غرام</option>
-          <option value="230 غرام">230 غرام</option>
-          <option value="450 غرام">450 غرام</option>
-          <option value="300 غرام">300 غرام</option>
-          <option value="225 غرام">225 غرام</option>
-          <option value="كيلو غرام">كيلو غرام</option>
-          <option value="2750 غرام">2750 غرام</option>
-          <option value="900 غرام">900 غرام</option>
-          <option value="20 كغ">20 كغ</option>
-        </select>`;
+
+    if (val === '') {
+      weightCell.innerHTML = getDefaultWeightSelect(id);
+      updateTotalWeight();
       return;
     }
+
     if (isDuplicate(val, this)) {
-      alert("هذا الصنف مضاف مسبقاً!");
-      this.value = "";
-      weightCell.innerHTML = `
-        <select name="weight_${id}" class="weight-select">
-          <option value="" disabled selected hidden>الوزن</option>
-          <option value="230 غرام">230 غرام</option>
-          <option value="230 غرام">230 غرام</option>
-          <option value="450 غرام">450 غرام</option>
-          <option value="300 غرام">300 غرام</option>
-          <option value="225 غرام">225 غرام</option>
-          <option value="كيلو غرام">كيلو غرام</option>
-          <option value="2750 غرام">2750 غرام</option>
-          <option value="900 غرام">900 غرام</option>
-          <option value="20 كغ">20 كغ</option>
-        </select>`;
+      alert('هذا الصنف مضاف مسبقاً!');
+      this.value = '';
+      weightCell.innerHTML = getDefaultWeightSelect(id);
+      updateTotalWeight();
       return;
     }
+
     const expectedWeight = productWeights[val];
     if (expectedWeight) {
-      weightCell.innerHTML = `
-        <select name="weight_${id}" class="weight-select">
-          <option value="${expectedWeight}" selected>${expectedWeight}</option>
-          <option value="230 غرام">230 غرام</option>
-          <option value="230 غرام">230 غرام</option>
-          <option value="450 غرام">450 غرام</option>
-          <option value="300 غرام">300 غرام</option>
-          <option value="225 غرام">225 غرام</option>
-          <option value="كيلو غرام">كيلو غرام</option>
-          <option value="2750 غرام">2750 غرام</option>
-          <option value="900 غرام">900 غرام</option>
-          <option value="20 كغ">20 كغ</option>
-        </select>`;
+      weightCell.innerHTML = getDefaultWeightSelect(id, expectedWeight);
     } else {
       weightCell.innerHTML = `
         <input type="text" name="weight_${id}" placeholder="اكتب الوزن (مثال: 400 غرام)" required>
       `;
     }
+    updateTotalWeight();
   });
 }
+
 function getOrderSummaryForDisplay() {
   const rows = document.querySelectorAll('#itemsBody tr');
   let summary = `عدد الأصناف: ${rows.length}\n───────────────\n\n`;
   let i = 1;
+  let totalKg = 0;
+
   rows.forEach(row => {
     const prod = row.querySelector('[name^="product_"]')?.value.trim();
     const qty = row.querySelector('[name^="quantity_"]')?.value;
@@ -427,25 +556,33 @@ function getOrderSummaryForDisplay() {
       if (wgt) summary += `الوزن: ${wgt}\n`;
       summary += '\n';
       i++;
+      totalKg += (parseFloat(qty) || 0) * parseWeightToKg(wgt);
     }
   });
+
+  const pallets = Math.ceil(totalKg / PALLET_MAX_KG);
+  summary += `───────────────\n`;
+  summary += `وزن الطلبية الإجمالي: ${totalKg.toFixed(2)} كغ\n`;
+  if (pallets > 0) {
+    summary += `عدد الطبالي: ${getPalletText(pallets)}\n`;
+  }
+
   return summary.trim();
 }
+
 function buildWhatsAppMessage() {
   const today = new Date();
-  
-  // أسماء الأيام بالعربي
+
   const weekdays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   const weekday = weekdays[today.getDay()];
-  
-  // التاريخ + الساعة بتنسيق مرغوب
+
   const day = today.getDate();
   const monthNum = String(today.getMonth() + 1).padStart(2, '0');
   const year = today.getFullYear();
-  const hours = today.getHours() % 12 || 12; // 12-hour format
+  const hours = today.getHours() % 12 || 12;
   const minutes = String(today.getMinutes()).padStart(2, '0');
   const period = today.getHours() >= 12 ? 'م' : 'ص';
-  
+
   const dateTimeStr = `${weekday}، ${day}/${monthNum}/${year} • الساعة ${hours}:${minutes} ${period}`;
 
   const gov = document.querySelector('[name="governorate"]').value.trim() || 'غير محدد';
@@ -460,6 +597,8 @@ function buildWhatsAppMessage() {
 
   const rows = document.querySelectorAll('#itemsBody tr');
   let idx = 1;
+  let totalKg = 0;
+
   rows.forEach(r => {
     const p = r.querySelector('[name^="product_"]')?.value.trim();
     const q = r.querySelector('[name^="quantity_"]')?.value;
@@ -467,57 +606,74 @@ function buildWhatsAppMessage() {
     if (p) {
       msg += `${idx}. ${p}\n`;
       if (w) msg += `وزن المنتج: ${w}\n`;
-      msg += `الكمية: ${q}\n`;
-      msg += '\n';
+      msg += `الكمية: ${q}\n\n`;
       idx++;
+      totalKg += (parseFloat(q) || 0) * parseWeightToKg(w);
     }
   });
 
+  const pallets = Math.ceil(totalKg / PALLET_MAX_KG);
+
+  msg += `*ملخص الوزن:*\n`;
+  msg += `الوزن الإجمالي: ${totalKg.toFixed(2)} كغ\n`;
+  if (pallets > 0) {
+    msg += `عدد الطبالي: ${getPalletText(pallets)}\n`;
+  }
+  msg += `\n`;
+
   if (notes) msg += `*ملاحظات:*\n${notes}\n\n`;
-  msg += `إجمالي الأصناف: ${idx-1}\nشكراً لكم – بانتظار التأكيد والتوصيل 🛒`;
+  msg += `إجمالي الأصناف: ${idx - 1}\nشكراً لكم – بانتظار التأكيد والتوصيل 🛒`;
 
   return msg;
 }
+
 // إضافة صف أول تلقائي
 addRow();
+updateTotalWeight();
+
 document.getElementById('orderForm').addEventListener('submit', e => {
   e.preventDefault();
   if (!e.target.governorate.value.trim() || !e.target.customerName.value.trim()) {
-    alert("يرجى تعبئة المحافظة واسم الزبون");
+    alert('يرجى تعبئة المحافظة واسم الزبون');
     return;
   }
   if (document.querySelectorAll('#itemsBody tr').length === 0) {
-    alert("يجب إضافة منتج واحد على الأقل");
+    alert('يجب إضافة منتج واحد على الأقل');
     return;
   }
   document.getElementById('reviewText').textContent = getOrderSummaryForDisplay();
   document.getElementById('reviewModal').style.display = 'flex';
 });
+
 document.getElementById('confirmAndSend').onclick = function() {
   document.getElementById('reviewModal').style.display = 'none';
   const msg = buildWhatsAppMessage();
-  const phone = "905522221237";
+  const phone = '905522221237';
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.classList.add('loading');
   btn.textContent = 'جاري الإرسال...';
-  fetch("https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec", {
-    method: "POST",
-    mode: "no-cors",
+
+  fetch('https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec', {
+    method: 'POST',
+    mode: 'no-cors',
     body: new FormData(document.getElementById('orderForm'))
   }).catch(() => {
     // لا نعرض خطأ قوي لأن الواتساب فتح بالفعل
   }).finally(() => {
     btn.disabled = false;
     btn.classList.remove('loading');
-    btn.textContent = "إرسال الطلب";
+    btn.textContent = 'إرسال الطلب';
     document.getElementById('orderForm').reset();
     document.getElementById('itemsBody').innerHTML = '';
     rowCounter = 0;
     addRow();
+    updateTotalWeight();
   });
 };
+
 document.getElementById('cancelReview').onclick = function() {
   document.getElementById('reviewModal').style.display = 'none';
 };
