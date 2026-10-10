@@ -398,6 +398,7 @@ const productWeights = {
   "027 900غ عجمي لبنة": "900 غرام",
   "028 أبو عبدو حمص 300غ": "علبة 300 غرام"
 };
+
 const PALLET_MAX_KG = 619;
 let rowCounter = 0;
 
@@ -411,29 +412,40 @@ function arabicToLatinDigits(str) {
   return str.replace(/[٠-٩۰-۹]/g, d => map[d] || d);
 }
 
+/* ========== استخراج الكمية (محسّن) ========== */
 function extractQuantity(line) {
   const latin = arabicToLatinDigits(line);
-  const matches = latin.match(/(\d+(?:[.,]\d+)?)/g);
+  // نحذف الأرقام المرتبطة بالوزن
+  let cleaned = latin
+    .replace(/(\d+(?:[.,]\d+)?)\s*(غرام|غ|جرام|كغ|كيلو|كغرام)/gi, ' ')
+    .replace(/(غرام|غ|جرام|كغ|كيلو|كغرام)\s*(\d+(?:[.,]\d+)?)/gi, ' ')
+    .replace(/\b(230|225|300|450|2750|900|380|350|20)\b/g, ' ');
+
+  const matches = cleaned.match(/(\d+(?:[.,]\d+)?)/g);
   if (!matches || matches.length === 0) return null;
-  const nums = matches.map(n => parseFloat(n.replace(',', '.')));
+
+  const nums = matches
+    .map(n => parseFloat(n.replace(',', '.')))
+    .filter(n => !isNaN(n) && n > 0 && n < 10000);
+
+  if (nums.length === 0) return null;
+
+  const large = nums.filter(n => n >= 10);
+  if (large.length > 0) return Math.max(...large);
   return Math.max(...nums);
 }
 
-/* ========== استخراج الوزن بشكل أدق ========== */
 function extractWeightInfo(line) {
   const latin = arabicToLatinDigits(line).toLowerCase().replace(/\s+/g, ' ');
 
-  // حالات خاصة
   if (/2750|كبيرة/.test(latin)) return { text: '2750 غرام' };
   if (/900|صغيرة/.test(latin)) return { text: '900 غرام' };
-  if (/20\s*كغ|20كغ|أسبتيك|خام/.test(latin)) return { text: '20 كغ' };
+  if (/20\s*كغ|20كغ|أسبتيك|اسبتيك|خام/.test(latin)) return { text: '20 كغ' };
 
-  // إذا وجد كيلو / دكما / طبشات → الوزن = كيلو غرام (الرقم = كمية)
   if (/دكما|دكمة|دكمه|طبشات|بالكيلو|كيلو|كغ/.test(latin)) {
     return { text: 'كيلو غرام' };
   }
 
-  // البحث عن وزن محدد (رقم + غرام)
   const gramMatch = latin.match(/(\d+(?:[.,]\d+)?)\s*(غرام|غ|جرام)/i) ||
                     latin.match(/(غرام|غ|جرام)\s*(\d+(?:[.,]\d+)?)/i);
   if (gramMatch) {
@@ -443,7 +455,6 @@ function extractWeightInfo(line) {
     }
   }
 
-  // أوزان شائعة
   if (/\b450\b/.test(latin)) return { text: '450 غرام' };
   if (/\b300\b/.test(latin)) return { text: '300 غرام' };
   if (/\b225\b/.test(latin)) return { text: '225 غرام' };
@@ -458,6 +469,7 @@ function findBestProduct(line) {
   const clean = arabicToLatinDigits(line).toLowerCase().replace(/\s+/g, ' ').trim();
   const weightInfo = extractWeightInfo(clean);
   const weight = weightInfo ? parseFloat(weightInfo.text) : null;
+
   const isBulk = /دكما|دكمة|دكمه|طبشات|بالكيلو|كيلو|كغ/.test(clean);
   const isCan = /علبة|علب/.test(clean);
   const hasKhal = /خال|الخال|بركات/.test(clean);
@@ -478,9 +490,7 @@ function findBestProduct(line) {
     if (weight === 2750 || /كبيرة/.test(clean)) return "026 2750غ عجمي لبنة";
     return "027 900غ عجمي لبنة";
   }
-
   if (hasAseptic) return "025 حمص خام أسبتيك 20 كغ";
-
   if (hasAbuAbdo || (hasHummus && weight === 300 && isCan)) {
     return "028 أبو عبدو حمص 300غ";
   }
@@ -528,7 +538,6 @@ function findBestProduct(line) {
       return fullName;
     }
   }
-
   return null;
 }
 
@@ -537,7 +546,9 @@ function parseWhatsAppText(text) {
   const results = [];
 
   for (const line of lines) {
-    if (/طلبية|طلب\s|محافظة|اسم الزبون|ملاحظات/i.test(line) && !/\d/.test(arabicToLatinDigits(line))) continue;
+    if (/طلبية|طلب\s|محافظة|اسم الزبون|ملاحظات|الزبون|المدينة/i.test(line) && !/\d/.test(arabicToLatinDigits(line))) {
+      continue;
+    }
 
     const qty = extractQuantity(line);
     if (!qty || qty <= 0) continue;
@@ -549,16 +560,13 @@ function parseWhatsAppText(text) {
     if (!product) {
       let name = arabicToLatinDigits(line)
         .replace(/(\d+(?:[.,]\d+)?)/g, '')
-        .replace(/(غرام|غ|كغ|كيلو|كغرام|جرام|دكما|دكمة|دكمه|طبشات)/gi, '')
+        .replace(/(غرام|غ|كغ|كيلو|كغرام|جرام|دكما|دكمة|دكمه|طبشات|علبة|علب)/gi, '')
         .replace(/\s+/g, ' ')
         .trim();
       if (!name) name = line;
       productName = name;
-
       const weightInfo = extractWeightInfo(line);
-      if (weightInfo) {
-        weight = weightInfo.text;
-      }
+      if (weightInfo) weight = weightInfo.text;
     }
 
     results.push({ product: productName, quantity: qty, weight: weight });
@@ -568,9 +576,10 @@ function parseWhatsAppText(text) {
 
 function fillFromParsed(results) {
   if (results.length === 0) {
-    alert('لم يتم التعرف على أي أصناف.\nتأكد من وجود كميات واضحة.');
+    alert('لم يتم التعرف على أي أصناف.\nتأكد من وجود كميات واضحة في النص.');
     return;
   }
+
   document.getElementById('itemsBody').innerHTML = '';
   rowCounter = 0;
 
@@ -591,6 +600,7 @@ function fillFromParsed(results) {
       weightCell.innerHTML = `<input type="text" name="weight_${id}" placeholder="اكتب الوزن" required>`;
     }
   });
+
   updateTotalWeight();
   alert(`تم تعبئة ${results.length} صنف بنجاح ✅\nراجع الكميات والأوزان قبل الإرسال.`);
 }
@@ -625,18 +635,23 @@ function updateTotalWeight() {
     const wgt = row.querySelector('[name^="weight_"]')?.value || '';
     totalKg += qty * parseWeightToKg(wgt);
   });
+
   const box = document.getElementById('totalWeightBox');
   const valueEl = document.getElementById('totalWeightValue');
   const statusEl = document.getElementById('weightStatus');
+
   valueEl.textContent = totalKg.toFixed(2) + ' كغ';
+
   if (totalKg <= 0) {
     box.classList.remove('over-limit');
     statusEl.textContent = 'أضف منتجات لحساب الوزن وعدد الطبالي';
     statusEl.style.color = '#666';
     return;
   }
+
   const pallets = Math.ceil(totalKg / PALLET_MAX_KG);
   const palletText = getPalletText(pallets);
+
   if (pallets === 1) {
     box.classList.remove('over-limit');
     statusEl.innerHTML = `الطلبية سوف تتم على <strong>${palletText}</strong>`;
@@ -675,7 +690,7 @@ function addRow() {
       <input list="product-list" name="product_${id}" placeholder="اختر أو اكتب اسم المنتج" required>
     </td>
     <td>
-      <input type="number" name="quantity_${id}" min="1" step="1" placeholder="الكمية" required>
+      <input type="number" name="quantity_${id}" min="0.5" step="any" placeholder="الكمية" required>
     </td>
     <td class="weight-cell" id="weight-cell-${id}">
       ${getDefaultWeightSelect(id)}
@@ -685,6 +700,7 @@ function addRow() {
     </td>
   `;
   document.getElementById('itemsBody').appendChild(tr);
+
   const productInput = tr.querySelector(`[name="product_${id}"]`);
   const qtyInput = tr.querySelector(`[name="quantity_${id}"]`);
   const weightCell = tr.querySelector(`#weight-cell-${id}`);
@@ -731,6 +747,7 @@ function getOrderSummaryForDisplay() {
   let summary = `عدد الأصناف: ${rows.length}\n───────────────\n\n`;
   let i = 1;
   let totalKg = 0;
+
   rows.forEach(row => {
     const prod = row.querySelector('[name^="product_"]')?.value.trim();
     const qty = row.querySelector('[name^="quantity_"]')?.value;
@@ -744,6 +761,7 @@ function getOrderSummaryForDisplay() {
       totalKg += (parseFloat(qty) || 0) * parseWeightToKg(wgt);
     }
   });
+
   const pallets = Math.ceil(totalKg / PALLET_MAX_KG);
   summary += `───────────────\n`;
   summary += `وزن الطلبية الإجمالي: ${totalKg.toFixed(2)} كغ\n`;
@@ -762,17 +780,21 @@ function buildWhatsAppMessage() {
   const minutes = String(today.getMinutes()).padStart(2, '0');
   const period = today.getHours() >= 12 ? 'م' : 'ص';
   const dateTimeStr = `${weekday}، ${day}/${monthNum}/${year} • الساعة ${hours}:${minutes} ${period}`;
+
   const gov = document.querySelector('[name="governorate"]').value.trim() || 'غير محدد';
   const name = document.querySelector('[name="customerName"]').value.trim() || 'غير محدد';
   const notes = document.querySelector('[name="notes"]').value.trim();
+
   let msg = `*طلب جديد - منتجات العجمي* 📦\n`;
   msg += `📅 ${dateTimeStr}\n\n`;
   msg += `📍 المحافظة: ${gov}\n`;
   msg += `👤 الزبون: ${name}\n\n`;
   msg += `*المنتجات:*\n`;
+
   const rows = document.querySelectorAll('#itemsBody tr');
   let idx = 1;
   let totalKg = 0;
+
   rows.forEach(r => {
     const p = r.querySelector('[name^="product_"]')?.value.trim();
     const q = r.querySelector('[name^="quantity_"]')?.value;
@@ -785,6 +807,7 @@ function buildWhatsAppMessage() {
       totalKg += (parseFloat(q) || 0) * parseWeightToKg(w);
     }
   });
+
   const pallets = Math.ceil(totalKg / PALLET_MAX_KG);
   msg += `*ملخص الوزن:*\n`;
   msg += `الوزن الإجمالي: ${totalKg.toFixed(2)} كغ\n`;
@@ -795,6 +818,51 @@ function buildWhatsAppMessage() {
   return msg;
 }
 
+/* ========== إعادة ترقيم الأصناف بدون فجوات (الحل الأساسي) ========== */
+function reindexItems() {
+  const rows = Array.from(document.querySelectorAll('#itemsBody tr'));
+  const validRows = [];
+
+  // نجمع فقط الصفوف اللي فيها منتج وكمية
+  rows.forEach(row => {
+    const prod = row.querySelector('[name^="product_"]')?.value.trim();
+    const qty = row.querySelector('[name^="quantity_"]')?.value;
+    if (prod && qty) {
+      validRows.push({
+        product: prod,
+        quantity: qty,
+        weight: row.querySelector('[name^="weight_"]')?.value || ''
+      });
+    }
+  });
+
+  // نمسح الجدول ونضيف من جديد بأرقام متسلسلة من 0
+  document.getElementById('itemsBody').innerHTML = '';
+  rowCounter = 0;
+
+  validRows.forEach(item => {
+    addRow();
+    const lastRow = document.querySelector('#itemsBody tr:last-child');
+    const prodInput = lastRow.querySelector('[name^="product_"]');
+    const qtyInput = lastRow.querySelector('[name^="quantity_"]');
+    const weightCell = lastRow.querySelector('.weight-cell');
+    const id = prodInput.name.split('_')[1];
+
+    prodInput.value = item.product;
+    qtyInput.value = item.quantity;
+
+    if (item.weight) {
+      weightCell.innerHTML = getDefaultWeightSelect(id, item.weight);
+    } else {
+      weightCell.innerHTML = `<input type="text" name="weight_${id}" placeholder="اكتب الوزن" required>`;
+    }
+  });
+
+  updateTotalWeight();
+  return validRows.length;
+}
+
+/* ========== الأحداث ========== */
 document.getElementById('toggleImportBtn').addEventListener('click', function() {
   const section = document.getElementById('importSection');
   const isHidden = section.style.display === 'none' || section.style.display === '';
@@ -821,23 +889,34 @@ document.getElementById('orderForm').addEventListener('submit', e => {
     alert('يرجى تعبئة المحافظة واسم الزبون');
     return;
   }
-  if (document.querySelectorAll('#itemsBody tr').length === 0) {
+
+  // إعادة الترقيم قبل المراجعة
+  const count = reindexItems();
+  if (count === 0) {
     alert('يجب إضافة منتج واحد على الأقل');
     return;
   }
+
   document.getElementById('reviewText').textContent = getOrderSummaryForDisplay();
   document.getElementById('reviewModal').style.display = 'flex';
 });
 
 document.getElementById('confirmAndSend').onclick = function() {
   document.getElementById('reviewModal').style.display = 'none';
+
+  // إعادة الترقيم مرة أخيرة قبل الإرسال (احتياطي)
+  reindexItems();
+
   const msg = buildWhatsAppMessage();
   const phone = '905522221237';
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.classList.add('loading');
   btn.textContent = 'جاري الإرسال...';
+
+  // نفس طريقة الإرسال القديمة بالضبط
   fetch('https://script.google.com/macros/s/AKfycbxrpX-EdIjiMZNNQwCBnWmMBzJaSqRBY5oSIYyFV0a95kMuAco-1JHaFa3ICNbMKzPI/exec', {
     method: 'POST',
     mode: 'no-cors',
