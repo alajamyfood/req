@@ -299,7 +299,7 @@ button[type="submit"] {
       <label style="margin-bottom:8px;">الصق نص الطلب من الواتساب هنا</label>
       <textarea id="whatsappText" placeholder="الصق هنا نص الطلب من الواتساب..."></textarea>
       <div class="hint">
-        يملأ الأصناف كما هي مكتوبة حتى لو ما طابقها مع القائمة • يدعم كل أشكال الكتابة
+        يملأ الأصناف كما هي مكتوبة حتى لو ما طابقها مع القائمة • يدعم العلب والدكما بدقة عالية
       </div>
       <button type="button" class="parse-btn" id="parseBtn">تعبئة تلقائية</button>
     </div>
@@ -424,11 +424,9 @@ function arabicToLatinDigits(str) {
   return str.replace(/[٠-٩۰-۹]/g, d => map[d] || d);
 }
 
-/* ========== استخراج الكمية - النسخة النهائية الموثوقة ========== */
+/* ========== استخراج الكمية ========== */
 function extractQuantity(line) {
   const text = arabicToLatinDigits(line);
-  
-  // نجمع كل الأرقام الموجودة في السطر
   const numbers = text.match(/(\d+(?:[.,]\d+)?)/g);
   if (!numbers || numbers.length === 0) return null;
 
@@ -437,8 +435,6 @@ function extractQuantity(line) {
     .filter(n => !isNaN(n) && n > 0 && n < 100000);
 
   if (nums.length === 0) return null;
-
-  // نفضل الرقم الأكبر (عادة الكمية أكبر من الوزن)
   return Math.max(...nums);
 }
 
@@ -470,13 +466,14 @@ function extractWeightInfo(line) {
   return null;
 }
 
-/* ========== التعرف على المنتج ========== */
+/* ========== التعرف الذكي على المنتج (محسّن للعلب) ========== */
 function findBestProduct(line) {
   const clean = arabicToLatinDigits(line).toLowerCase().replace(/\s+/g, ' ').trim();
   const weightInfo = extractWeightInfo(clean);
   const weightNum = weightInfo ? parseFloat(weightInfo.text.replace(/[^\d.]/g, '')) : null;
   
   const isBulk = /دكما|دكمة|دكمه|طبشات|بالكيلو|بال كيلو|كيلو|كغ/.test(clean);
+  const isCan  = /علبة|علب|كان/.test(clean);   // ← مهم جداً
   const hasKhal = /خال|الخال|بركات/.test(clean);
   const hasHimsani = /حمصاني|الحمصاني|وسط/.test(clean);
   const hasZad = /زاد|زاد العربي|اكسترا|إكسترا|ممتاز/.test(clean);
@@ -488,13 +485,19 @@ function findBestProduct(line) {
   const hasAseptic = /أسبتيك|اسبتيك|خام|مطبوخ/.test(clean);
   const hasMNZ = /mnz|ام ان زد|إم إن زد/.test(clean);
 
+  // لبنة
   if (hasLabneh) {
     if (weightNum === 2750 || /كبيرة/.test(clean)) return "026 2750غ عجمي لبنة";
     return "027 900غ عجمي لبنة";
   }
+
+  // أسبتيك
   if (hasAseptic) return "025 حمص خام أسبتيك 20 كغ";
+
+  // أبو عبدو
   if (hasAbuAbdo) return "028 أبو عبدو حمص 300غ";
 
+  // ========== كريم الثوم ==========
   if (hasGarlic) {
     if (isBulk) {
       if (hasKhal) return "022 الخال كريم الثوم بالكيلو";
@@ -502,30 +505,46 @@ function findBestProduct(line) {
       if (hasZad || hasMNZ) return "020 زاد العربي كريم الثوم بالكيلو";
       return "020 زاد العربي كريم الثوم بالكيلو";
     }
+    // ← هنا التحسين المهم: إذا كتب علبة
+    if (isCan || weightNum === 225) return "007 عجمي كريم الثوم 225غ";
+    
     if (hasZad) return "011 زاد العربي كريم الثوم 230غ";
     if (hasKhal) return "016 الخال كريم الثوم 230غ";
     if (hasHimsani) return "014 الحمصاني كريم الثوم 230غ";
-    if (weightNum === 225) return "007 عجمي كريم الثوم 225غ";
     return "002 عجمي كريم الثوم 230غ";
   }
 
+  // ========== متبل ==========
   if (hasMutabbal) {
     if (isBulk) return "024 عجمي متبل بالكيلو";
+    
+    // ← علبة
+    if (isCan || weightNum === 225) return "009 عجمي متبل 225غ";
+    if (weightNum === 450) return "008 عجمي متبل 450غ";
+    
     if (hasZad) return "012 زاد العربي متبل 230غ";
     if (hasKhal) return "017 الخال متبل 230غ";
-    if (weightNum === 450) return "008 عجمي متبل 450غ";
-    if (weightNum === 225) return "009 عجمي متبل 225غ";
     return "003 عجمي متبل 230غ";
   }
 
+  // ========== حمص ==========
   if (hasHummus) {
     if (isBulk) {
       if (hasHimsani) return "019 الحمصاني حمص بالكيلو";
       return "018 عجمي حمص بالكيلو";
     }
+    
+    // ← علب الحمص
+    if (isCan) {
+      if (weightNum === 450) return "004 عجمي حمص 450غ";
+      if (weightNum === 300) return "005 عجمي حمص 300غ";
+      return "006 عجمي حمص 225غ"; // افتراضي للعلبة
+    }
+    
     if (weightNum === 450) return "004 عجمي حمص 450غ";
     if (weightNum === 300) return "005 عجمي حمص 300غ";
     if (weightNum === 225) return "006 عجمي حمص 225غ";
+    
     if (hasZad) return "010 زاد العربي حمص بالطحينة 230غ";
     if (hasKhal) return "015 الخال حمص 230غ";
     if (hasHimsani) return "013 الحمصاني حمص 230غ";
@@ -542,13 +561,12 @@ function findBestProduct(line) {
   return null;
 }
 
-/* ========== تحليل نص الواتساب - النسخة النهائية ========== */
+/* ========== تحليل نص الواتساب ========== */
 function parseWhatsAppText(text) {
   const lines = text.split(/[\n\r]+/).map(l => l.trim()).filter(l => l.length > 1);
   const results = [];
 
   for (const line of lines) {
-    // نتجاهل فقط أسطر العناوين الواضحة
     if (/^(طلبية|طلب\s|محافظة|اسم الزبون|ملاحظات|الزبون|المدينة|تاريخ|وقت|العنوان|الهاتف)/i.test(line) && 
         !/\d/.test(arabicToLatinDigits(line))) {
       continue;
@@ -557,14 +575,12 @@ function parseWhatsAppText(text) {
     const qty = extractQuantity(line);
     if (!qty || qty <= 0) continue;
 
-    // نحاول نلاقي المنتج من القائمة
     let product = findBestProduct(line);
     let weight = product ? productWeights[product] : '';
 
-    // إذا ما لقيناه → نكتب الاسم كما هو (بعد تنظيف بسيط للكمية)
     if (!product) {
       let name = arabicToLatinDigits(line)
-        .replace(/(\d+(?:[.,]\d+)?)/g, '')          // نشيل الأرقام
+        .replace(/(\d+(?:[.,]\d+)?)/g, '')
         .replace(/(غرام|غ|كغ|كيلو|كغرام|جرام|دكما|دكمة|دكمه|طبشات|علبة|علب)/gi, '')
         .replace(/\s+/g, ' ')
         .trim();
